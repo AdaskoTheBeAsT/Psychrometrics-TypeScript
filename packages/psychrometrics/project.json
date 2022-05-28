@@ -97,7 +97,7 @@
         "main": "packages/psychrometrics/src/index.ts",
         "outputPath": "dist/packages/psychrometrics/bundles",
         "compiler": "babel",
-        "optimization": false,
+        "optimization": true,
         "extractLicenses": true,
         "runtimeChunk": false,
         "vendorChunk": false,
