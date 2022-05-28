@@ -15,30 +15,30 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { elevationByAirPressure } from './elevation-by-air-pressure';
+import { altitudeToAirPressure } from './altitude-to-air-pressure';
 
-describe('elevationByAirPressure', () => {
-  it('should throw when air press too high', () => {
+describe('elevationToAirPressure', () => {
+  it('should throw when height too high', () => {
     expect.hasAssertions();
 
-    expect(() => elevationByAirPressure(107000)).toThrowError();
+    expect(() => altitudeToAirPressure(9000)).toThrowError();
   });
 
-  it('should throw when air press too low', () => {
+  it('should throw when height too low', () => {
     expect.hasAssertions();
 
-    expect(() => elevationByAirPressure(30000)).toThrowError();
+    expect(() => altitudeToAirPressure(-500)).toThrowError();
   });
 
-  it('should calculate when passing 31444.626324128334', () => {
+  it('should calculate when passing 8848', () => {
     expect.hasAssertions();
 
-    expect(elevationByAirPressure(31444.626324128334)).toBe(8848);
+    expect(altitudeToAirPressure(8848)).toBe(31444.24523603051);
   });
 
-  it('should calculate when passing 106604.5657108011', () => {
+  it('should calculate when passing -430.5', () => {
     expect.hasAssertions();
 
-    expect(elevationByAirPressure(106604.5657108011)).toBe(-430.4999999999994);
+    expect(altitudeToAirPressure(-430.5)).toBe(106604.6217946672);
   });
 });

@@ -16,11 +16,11 @@
  */
 
 /**
- * Calculates saturation vapor pressure of water by temperature.
+ * Converts temperature to saturation vapor pressure of water.
  * @param temperature Temperature [°C].
  * @returns Saturation vapor pressure of water [Pa].
  */
-export function saturationVaporPressureOfWaterByTemperature(temperature: number): number {
+export function temperatureToSaturationVaporPressureOfWater(temperature: number): number {
   if (temperature <= 0) {
     throw new Error(`Temperature too low. Needs to be greater than 0°C.`);
   }
@@ -33,11 +33,11 @@ export function saturationVaporPressureOfWaterByTemperature(temperature: number)
 }
 
 /**
- * Calculates saturation vapor pressure of ice by temperature.
+ * Converts temperature to saturation vapor pressure of ice.
  * @param temperature Temperature [°C].
  * @returns Saturation vapor pressure of ice [Pa].
  */
-export function saturationVaporPressureOfIceByTemperature(temperature: number): number {
+export function temperatureToSaturationVaporPressureOfIce(temperature: number): number {
   if (temperature > 0) {
     throw new Error(`Temperature too high. Needs to be less than or equal 0°C.`);
   }
@@ -50,14 +50,14 @@ export function saturationVaporPressureOfIceByTemperature(temperature: number): 
 }
 
 /**
- * Calculates saturation vapor pressure by temperature.
+ * Converts temperature to saturation vapor pressure.
  * @param temperature Temperature [°C].
  * @returns Saturation vapor pressure [Pa].
  */
-export function saturationVaporPressureByTemperature(temperature: number): number {
+export function temperatureToSaturationVaporPressure(temperature: number): number {
   if (temperature > 0) {
-    return saturationVaporPressureOfWaterByTemperature(temperature);
+    return temperatureToSaturationVaporPressureOfWater(temperature);
   }
 
-  return saturationVaporPressureOfIceByTemperature(temperature);
+  return temperatureToSaturationVaporPressureOfIce(temperature);
 }

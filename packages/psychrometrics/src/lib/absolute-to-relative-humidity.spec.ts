@@ -15,30 +15,20 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { airPressureByElevation } from './air-pressure-by-elevation';
+import { absoluteToRelativeHumidity } from './absolute-to-relative-humidity';
 
-describe('airPressureByElevation', () => {
-  it('should throw when height too high', () => {
-    expect.hasAssertions();
+describe('absoluteToRelativeHumidity', () => {
+  const testCases = [
+    [101325, 20, 8.736841601662796, 59.99999999999999],
+    [101325, -20, 0.3804182346564335, 59.999999999999986],
+  ];
 
-    expect(() => airPressureByElevation(9000)).toThrowError();
-  });
+  it.each(testCases)(
+    'given air pressure=%p temperature=%p absolute humidity=%p returns %p',
+    (airPressure, temperature, absoluteHumidity, expected) => {
+      const relativeHumidity = absoluteToRelativeHumidity(airPressure, temperature, absoluteHumidity);
 
-  it('should throw when height too low', () => {
-    expect.hasAssertions();
-
-    expect(() => airPressureByElevation(-500)).toThrowError();
-  });
-
-  it('should calculate when passing 8848', () => {
-    expect.hasAssertions();
-
-    expect(airPressureByElevation(8848)).toBe(31444.626324128334);
-  });
-
-  it('should calculate when passing -430.5', () => {
-    expect.hasAssertions();
-
-    expect(airPressureByElevation(-430.5)).toBe(106604.5657108011);
-  });
+      expect(relativeHumidity).toBe(expected);
+    }
+  );
 });

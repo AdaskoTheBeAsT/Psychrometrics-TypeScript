@@ -15,25 +15,20 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Initializer } from './initializer';
+import { relativeToAbsoluteHumidity } from './relative-to-absolute-humidity';
 
-/**
- * Calculates temperature by saturation vapor pressure.
- * @param pressure Saturation vapor pressure [Pa].
- * @returns Temperature [°C].
- */
-export function temperatureBySaturationVaporPressure(pressure: number): number {
-  if (pressure < 0.0014049735954231866) {
-    throw new Error('Pressure to low. Needs to be higher than 0.0014049735954231866.');
-  }
+describe('absoluteToRelativeHumidity', () => {
+  const testCases = [
+    [101325, 20, 60, 8.736841601662796],
+    [101325, -20, 60, 0.3804182346564335],
+  ];
 
-  if (pressure > 101416.99487195771) {
-    throw new Error('Pressure to high. Needs to be lower than 101416.99487195771.');
-  }
+  it.each(testCases)(
+    'given air pressure=%p temperature=%p relative humidity=%p returns %p',
+    (airPressure, temperature, relativeHumidity, expected) => {
+      const absoluteHumidity = relativeToAbsoluteHumidity(airPressure, temperature, relativeHumidity);
 
-  if (pressure >= 101416.99487) {
-    return 100;
-  }
-
-  return Number(Initializer.saturationVaporPressureToTempSpline.interpolate(pressure).toFixed(12));
-}
+      expect(absoluteHumidity).toBe(expected);
+    }
+  );
+});

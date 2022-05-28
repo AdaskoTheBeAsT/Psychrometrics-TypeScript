@@ -1,9 +1,13 @@
 {
+  "exclude": "node_modules/**",
   "presets": [
     [
       "@nrwl/web/babel",
       {
-        "useBuiltIns": "usage"
+        "useBuiltIns": "usage",
+        "corejs": {
+          "version": 3
+        }
       }
     ]
   ]

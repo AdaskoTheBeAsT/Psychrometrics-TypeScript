@@ -16,46 +16,41 @@
  */
 
 /**
- * Atmospheric pressure [Pa]
+ * Average atmospheric pressure at sea level [Pa]
  */
-export const P0 = 101325.0;
+export const AveragePressureAtSeaLevel = 101325.0;
 
 /**
  * Gravitational acceleration [m/s²]
  */
-export const g = 9.80665;
+export const GravitationalAcceleration = 9.80665;
 
 /**
- * Molar mass of Earth's air [kg/mol]
+ * Standard temperature (15°C) in Kelvin [°K]
  */
-export const M = 0.0289644;
+export const StandardTemperature = 288.15;
 
 /**
- * Standard temperature (15°C) in Kelvin [K]
+ * Universal gas constant J/(mol·K) or (N·m)/(mol·K)
  */
-export const T = 288.15;
-
-/**
- * Universal gas constant J/(mol·K)
- */
-export const R = 8.31446261815324;
+export const UniversalGasConstant = 8.31446261815324;
 
 /**
  * Temperature lapse rate [K/m]
  */
-export const Lb = -0.0065;
+export const TemperatureLapseRate = -0.0065;
 
 /**
- * MolecularWaterWeight [g/mol]
+ * MolecularWaterWeight [kg/mol]
  */
-export const MolecularWaterWeight = 18.01528;
+export const MolecularWeightOfWater = 0.01801528;
 
 /**
- * MolecularDryAirWeight [g/mol]
+ * MolecularDryAirWeight [kg/mol]
  */
-export const MolecularDryAirWeight = 28.9647;
+export const MolecularWeightOfDryAir = 0.0289647;
 
 /**
  * Molecular weight water to dry air ratio
  */
-export const MolecularWeightRatio = MolecularWaterWeight / MolecularDryAirWeight;
+export const MolecularWeightRatio = MolecularWeightOfWater / MolecularWeightOfDryAir;

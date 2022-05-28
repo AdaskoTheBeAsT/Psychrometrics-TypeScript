@@ -43,7 +43,7 @@
     "copy-license-readme": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "shx cp ./README.md ./packages/psychrometrics/src/README.md && shx cp ./LICENSE ./packages/psychrometrics/src/LICENSE"
+        "command": "shx cp ./README.md ./packages/psychrometrics/src/README.md && shx cp ./LICENSE ./packages/psychrometrics/src/LICENSE && shx cp -R ./doc ./packages/psychrometrics/src"
       }
     },
 
@@ -63,9 +63,21 @@
         "tsConfig": "packages/psychrometrics/tsconfig.lib.json",
         "compiler": "babel",
         "umdName": "OtherName",
-        "external": ["typescript"],
-        "format": ["cjs", "esm", "umd"],
-        "assets": ["packages/psychrometrics/src/README.md"]
+        "external": ["typescript", "core-js", "@adaskothebeast/splines"],
+        "format": ["cjs", "esm"],
+        "assets": [
+          {
+            "glob": "*.md",
+            "input": "packages/psychrometrics/src/doc",
+            "output": "./doc"
+          },
+          {
+            "glob": "README.md",
+            "input": "packages/psychrometrics/src",
+            "output": "./"
+          }
+        ],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "bundle": {
@@ -85,7 +97,7 @@
         "main": "packages/psychrometrics/src/index.ts",
         "outputPath": "dist/packages/psychrometrics/bundles",
         "compiler": "babel",
-        "optimization": true,
+        "optimization": false,
         "extractLicenses": true,
         "runtimeChunk": false,
         "vendorChunk": false,

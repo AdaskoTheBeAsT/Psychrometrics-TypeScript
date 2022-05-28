@@ -15,19 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Lb, M, P0, R, T, g } from './constants';
-
-/**
- * Calculate elevation (above mean sea level) by air pressure
- * @param airPressure air pressure [Pa]
- * @returns meters above mean see level [m]
- */
-export function elevationByAirPressure(airPressure: number) {
-  if (airPressure < 31444.626324128334) {
-    throw new Error('Air press too low. Should be higher than or equal 31444.626324128334');
-  }
-  if (airPressure > 106604.5657108011) {
-    throw new Error('Air press too high. Should be lower than or equal 106604.5657108011');
-  }
-  return (Math.pow(airPressure / P0, (R * Lb) / (-g * M)) * T - T) / Lb;
+export function temperatureAndAbsoluteHumidityToEnthalpy(temperature: number, absoluteHumidity: number): number {
+  const absoluteHumidityNormalized = absoluteHumidity / 1000.0;
+  return 1.006 * temperature + absoluteHumidityNormalized * (2501.0 + 1.805 * temperature);
 }

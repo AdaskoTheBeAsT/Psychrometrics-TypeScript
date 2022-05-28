@@ -16,10 +16,10 @@
  */
 
 import { Initializer } from './initializer';
-import { saturationVaporPressureByTemperature } from './saturation-vapor-pressure-by-temperature';
-import { temperatureBySaturationVaporPressure } from './temperature-by-saturation-vapor-pressure';
+import { saturationVaporPressureToTemperature } from './saturation-vapor-pressure-to-temperature';
+import { temperatureToSaturationVaporPressure } from './temperature-to-saturation-vapor-pressure';
 
-describe('temperatureBySaturationVaporPressure', () => {
+describe('saturationVaporPressureToTemperature', () => {
   beforeAll(() => {
     Initializer.initialize(2);
   });
@@ -27,38 +27,58 @@ describe('temperatureBySaturationVaporPressure', () => {
   it('should throw when temperature too high', () => {
     expect.hasAssertions();
 
-    expect(() => temperatureBySaturationVaporPressure(102000)).toThrowError();
+    expect(() => saturationVaporPressureToTemperature(102000)).toThrowError();
   });
 
   it('should throw when temperature too low', () => {
     expect.hasAssertions();
 
-    expect(() => temperatureBySaturationVaporPressure(0.0001)).toThrowError();
+    expect(() => saturationVaporPressureToTemperature(0.0001)).toThrowError();
   });
 
   it('should calculate when passing 0.0014049735954231866', () => {
     expect.hasAssertions();
 
-    expect(temperatureBySaturationVaporPressure(0.0014049735954231866)).toBe(-100);
+    expect(saturationVaporPressureToTemperature(0.0014049735954231866)).toBe(-100);
   });
 
   it('should calculate when passing 611.2911778902558', () => {
     expect.hasAssertions();
 
-    expect(temperatureBySaturationVaporPressure(611.2911778902558)).toBe(0);
+    expect(saturationVaporPressureToTemperature(611.2911778902558)).toBe(0);
   });
 
   it('should calculate when passing 101416.99487195771', () => {
     expect.hasAssertions();
 
-    expect(temperatureBySaturationVaporPressure(101416.99487195771)).toBe(100);
+    expect(saturationVaporPressureToTemperature(101416.99487195771)).toBe(100);
   });
 
   it('should give same result when passing 20.5', () => {
     expect.hasAssertions();
 
-    const press = saturationVaporPressureByTemperature(20.5);
+    const press = temperatureToSaturationVaporPressure(20.5);
 
-    expect(temperatureBySaturationVaporPressure(press)).toBe(20.5);
+    expect(saturationVaporPressureToTemperature(press)).toBe(20.5);
+  });
+
+  it('should run 1000 loop for 20C', () => {
+    let temperature = 20;
+    for (let i = 0; i < 1000; i++) {
+      const pressure = temperatureToSaturationVaporPressure(temperature);
+      temperature = saturationVaporPressureToTemperature(pressure);
+    }
+
+    expect(temperature).toBe(20);
+  });
+
+  it('should run 1000 loop for -20C', () => {
+    let temperature = -20;
+    for (let i = 0; i < 1000; i++) {
+      const pressure = temperatureToSaturationVaporPressure(temperature);
+      temperature = saturationVaporPressureToTemperature(pressure);
+    }
+
+    expect(temperature).toBe(-20);
   });
 });

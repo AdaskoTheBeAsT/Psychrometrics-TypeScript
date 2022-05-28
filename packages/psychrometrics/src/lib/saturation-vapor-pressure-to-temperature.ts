@@ -15,19 +15,25 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Lb, M, P0, R, T, g } from './constants';
+import { Initializer } from './initializer';
 
 /**
- * Calculate air pressure by elevation (above mean sea level)
- * @param elevation meters above mean see level [m]
- * @returns air pressure [Pa]
+ * Calculates temperature by saturation vapor pressure.
+ * @param pressure Saturation vapor pressure [Pa].
+ * @returns Temperature [°C].
  */
-export function airPressureByElevation(elevation: number): number {
-  if (elevation > 8848) {
-    throw new Error('Height too high. Should be lower than 8848[m]');
+export function saturationVaporPressureToTemperature(pressure: number): number {
+  if (pressure < 0.0014049735954231866) {
+    throw new Error('Pressure to low. Needs to be higher than 0.0014049735954231866.');
   }
-  if (elevation < -430.5) {
-    throw new Error('Height too low. Should be higher than -430.5[m]');
+
+  if (pressure > 101416.99487195771) {
+    throw new Error('Pressure to high. Needs to be lower than 101416.99487195771.');
   }
-  return P0 * Math.pow((T + elevation * Lb) / T, (-g * M) / (R * Lb));
+
+  if (pressure >= 101416.99487) {
+    return 100;
+  }
+
+  return Number(Initializer.saturationVaporPressureToTemperatureSpline.interpolate(pressure).toFixed(12));
 }
