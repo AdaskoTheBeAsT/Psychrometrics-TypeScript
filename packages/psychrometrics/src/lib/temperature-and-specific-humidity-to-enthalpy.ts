@@ -15,20 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { absoluteToRelativeHumidity } from './absolute-to-relative-humidity';
-
-describe('absoluteToRelativeHumidity', () => {
-  const testCases = [
-    [101325, 20, 8.736841601662796, 59.99999999999999],
-    [101325, -20, 0.3804182346564335, 59.999999999999986],
-  ];
-
-  it.each(testCases)(
-    'given air pressure=%p temperature=%p absolute humidity=%p returns %p',
-    (airPressure, temperature, absoluteHumidity, expected) => {
-      const relativeHumidity = absoluteToRelativeHumidity(airPressure, temperature, absoluteHumidity);
-
-      expect(relativeHumidity).toBe(expected);
-    }
-  );
-});
+export function temperatureAndSpecificHumidityToEnthalpy(temperature: number, specificHumidity: number): number {
+  const specificHumidityNormalized = specificHumidity / 1000.0;
+  return 1.006 * temperature + specificHumidityNormalized * (2501.0 + 1.805 * temperature);
+}

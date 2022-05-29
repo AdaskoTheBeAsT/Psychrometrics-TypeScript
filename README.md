@@ -4,12 +4,16 @@
 
 ### Psychrometrics formulas. Formulas converts
 
+- [air pressure to attitude (above mean sea level)](doc/air-pressure-to-altitude.md)
+- [attitude (above mean sea level) to air pressure](doc/altitude-to-air-pressure.md)
+- relative to specific humidity
+- [saturation vapor pressure to temperature](doc/saturation-vapor-pressure-to-temperature.md)
+- specific and relative humidity to temperature
+- specific to relative humidity
+- temperature and specific humidity to enthalpy
 - [temperature to saturation vapor pressure of water](doc/temperature-to-saturation-vapor-pressure-of-water.md)
 - [temperature to saturation vapor pressure of ice](doc/temperature-to-saturation-vapor-pressure-of-ice.md)
 - [temperature to saturation vapor pressure](doc/temperature-to-saturation-vapor-pressure.md)
-- [saturation vapor pressure to temperature](doc/saturation-vapor-pressure-to-temperature.md)
-- [air pressure to attitude (above mean sea level)](doc/air-pressure-to-altitude.md)
-- [attitude (above mean sea level) to air pressure](doc/altitude-to-air-pressure.md)
 
 ## Installation
 

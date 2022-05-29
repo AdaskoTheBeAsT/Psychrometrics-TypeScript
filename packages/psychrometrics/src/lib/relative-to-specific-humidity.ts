@@ -19,13 +19,13 @@ import { MolecularWeightRatio } from './constants';
 import { temperatureToSaturationVaporPressure } from './temperature-to-saturation-vapor-pressure';
 
 /**
- * Converts relative to absolute humidity
+ * Converts relative to specific humidity
  * @param airPressure Air pressure [Pa]
  * @param temperature Temperature [°C]
  * @param relativeHumidity Relative humidity [%]
- * @returns Absolute humidity [g/kg]
+ * @returns Specific humidity [g/kg]
  */
-export function relativeToAbsoluteHumidity(airPressure: number, temperature: number, relativeHumidity: number): number {
+export function relativeToSpecificHumidity(airPressure: number, temperature: number, relativeHumidity: number): number {
   const relativeHumidityNormalized = relativeHumidity / 100.0;
   const saturationVaporPressure = temperatureToSaturationVaporPressure(temperature);
   const saturatedHumidityRatio =
