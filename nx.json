@@ -23,5 +23,10 @@
       }
     }
   },
-  "defaultProject": "psychrometrics"
+  "defaultProject": "psychrometrics",
+  "pluginsConfig": {
+    "@nrwl/js": {
+      "analyzeSourceFiles": true
+    }
+  }
 }

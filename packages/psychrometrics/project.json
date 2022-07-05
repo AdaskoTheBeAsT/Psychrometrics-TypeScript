@@ -46,7 +46,6 @@
         "command": "shx cp ./README.md ./packages/psychrometrics/src/README.md && shx cp ./LICENSE ./packages/psychrometrics/src/LICENSE && shx cp -R ./doc ./packages/psychrometrics/src"
       }
     },
-
     "package": {
       "executor": "@nrwl/web:rollup",
       "outputs": ["{options.outputPath}"],
