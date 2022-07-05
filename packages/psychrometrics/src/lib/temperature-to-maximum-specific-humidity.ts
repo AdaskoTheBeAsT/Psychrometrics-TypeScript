@@ -15,21 +15,17 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { relativeToSpecificHumidity } from './relative-to-specific-humidity';
+import { MolecularWeightRatio } from './constants';
+import { temperatureToSaturationVaporPressure } from './temperature-to-saturation-vapor-pressure';
 
-describe('specificToRelativeHumidity', () => {
-  const testCases = [
-    [101325, 32, 60, 18.038226360479687],
-    [101325, 20, 60, 8.736841601662796],
-    [101325, -20, 60, 0.3804182346564335],
-  ];
-
-  it.each(testCases)(
-    'given air pressure=%p temperature=%p relative humidity=%p returns %p',
-    (airPressure, temperature, relativeHumidity, expected) => {
-      const specificHumidity = relativeToSpecificHumidity(airPressure, temperature, relativeHumidity);
-
-      expect(specificHumidity).toBe(expected);
-    }
-  );
-});
+/**
+ * Converts temperature to maximum specific humidity.
+ * @param airPressure Air pressure [Pa].
+ * @param temperature Temperature [°C].
+ * @returns Maximum specific humidity [g/kg].
+ */
+export function temperatureToMaximumSpecificHumidity(airPressure: number, temperature: number): number {
+  const saturatedPress = temperatureToSaturationVaporPressure(temperature);
+  const saturatedSpecificHumidity = (MolecularWeightRatio * saturatedPress) / (airPressure - saturatedPress);
+  return 1000.0 * saturatedSpecificHumidity;
+}
