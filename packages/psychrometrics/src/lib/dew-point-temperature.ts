@@ -15,19 +15,18 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { temperatureToMaximumSpecificHumidity } from './temperature-to-maximum-specific-humidity';
+import { MolecularWeightRatio } from './constants';
+import { saturationVaporPressureToTemperature } from './saturation-vapor-pressure-to-temperature';
 
-describe('temperatureToMaximumSpecificHumidity', () => {
-  const testCases = [
-    [101325, 20, 14.699054061706954],
-    [101325, 0, 3.7751266016292133],
-    [101325, -1, 3.4738170173133707],
-    [101325, -20, 0.6342890248947272],
-  ];
-
-  it.each(testCases)('given air pressure=%p temperature=%p returns %p', (airPressure, temperature, expected) => {
-    const specificHumidity = temperatureToMaximumSpecificHumidity(airPressure, temperature);
-
-    expect(specificHumidity).toBe(expected);
-  });
-});
+/**
+ * Calculates dew point temperature from specific humidity [°C].
+ * @param airPressure Air pressure [Pa].
+ * @param specificHumidity Specific humidity [g/kg].
+ * @returns Dew point temperature [°C].
+ */
+export function dewPointTemperature(airPressure: number, specificHumidity: number): number {
+  const specificHumidityNormalized = specificHumidity / 1000.0;
+  const saturatedPress =
+    (specificHumidityNormalized * airPressure) / (specificHumidityNormalized + MolecularWeightRatio);
+  return saturationVaporPressureToTemperature(saturatedPress);
+}

@@ -15,19 +15,26 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { temperatureToMaximumSpecificHumidity } from './temperature-to-maximum-specific-humidity';
+import { Initializer } from './initializer';
+import { wetBulbTemperatureToSpecificHumidity } from './wet-bulb-temperature-to-specific-humidity';
 
-describe('temperatureToMaximumSpecificHumidity', () => {
+describe('wetBulbTemperatureToSpecificHumidity', () => {
+  beforeAll(() => {
+    Initializer.initialize(2);
+  });
+
   const testCases = [
-    [101325, 20, 14.699054061706954],
-    [101325, 0, 3.7751266016292133],
-    [101325, -1, 3.4738170173133707],
-    [101325, -20, 0.6342890248947272],
+    [101325, 20, 15.09927747192241, 8.73684239897718],
+    [101325, 0, 0, 3.775126601629213],
+    [101325, -20, -20.542690827750253, 0.3804224088580431],
   ];
 
-  it.each(testCases)('given air pressure=%p temperature=%p returns %p', (airPressure, temperature, expected) => {
-    const specificHumidity = temperatureToMaximumSpecificHumidity(airPressure, temperature);
+  it.each(testCases)(
+    'given air pressure=%p temperature=%p wet bulb temperature=%p returns %p',
+    (airPressure, temperature, wetBulbTemperature, expected) => {
+      const wbt = wetBulbTemperatureToSpecificHumidity(airPressure, temperature, wetBulbTemperature);
 
-    expect(specificHumidity).toBe(expected);
-  });
+      expect(wbt).toBe(expected);
+    }
+  );
 });

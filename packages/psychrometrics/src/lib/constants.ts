@@ -21,9 +21,44 @@
 export const AveragePressureAtSeaLevel = 101325.0;
 
 /**
+ * Evaporation heat [kJ/kg]
+ */
+export const EvaporationHeat = 2501;
+
+/**
  * Gravitational acceleration [m/s²]
  */
 export const GravitationalAcceleration = 9.80665;
+
+/**
+ * Molecular weight of dry air [kg/mol]
+ */
+export const MolecularWeightOfDryAir = 0.0289647;
+
+/**
+ * Molecular weight of water vapor [kg/mol]
+ */
+export const MolecularWeightOfWaterVapor = 0.01801528;
+
+/**
+ * Molecular weight water to dry air ratio
+ */
+export const MolecularWeightRatio = MolecularWeightOfWaterVapor / MolecularWeightOfDryAir;
+
+/**
+ * Specific heat capacity of air below 0 [kJ/kg°C]
+ */
+export const SpecificHeatCapacityOfAirBelowZero = 1.005;
+
+/**
+ * Specific heat capacity of air equal or above 0 [kJ/kg°C]
+ */
+export const SpecificHeatCapacityOfAirEqAboveZero = 1.007;
+
+/**
+ * Specific heat capacity of water [kJ/kg°C]
+ */
+export const SpecificHeatCapacityOfWater = 1.84;
 
 /**
  * Standard temperature (15°C) in Kelvin [°K]
@@ -31,26 +66,21 @@ export const GravitationalAcceleration = 9.80665;
 export const StandardTemperature = 288.15;
 
 /**
- * Universal gas constant J/(mol·K) or (N·m)/(mol·K)
- */
-export const UniversalGasConstant = 8.31446261815324;
-
-/**
  * Temperature lapse rate [K/m]
  */
 export const TemperatureLapseRate = -0.0065;
 
 /**
- * MolecularWaterWeight [kg/mol]
+ * Universal gas constant J/(mol·K) or (N·m)/(mol·K)
  */
-export const MolecularWeightOfWater = 0.01801528;
+export const UniversalGasConstant = 8.31446261815324;
 
 /**
- * MolecularDryAirWeight [kg/mol]
+ * Gas constant for dry air [J/(kg·K)]
  */
-export const MolecularWeightOfDryAir = 0.0289647;
+export const GasConstantForDryAir = UniversalGasConstant / MolecularWeightOfDryAir;
 
 /**
- * Molecular weight water to dry air ratio
+ * Gas constant for dry air [J/(kg·K)]
  */
-export const MolecularWeightRatio = MolecularWeightOfWater / MolecularWeightOfDryAir;
+export const GasConstantForWaterVapor = UniversalGasConstant / MolecularWeightOfWaterVapor;

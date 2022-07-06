@@ -15,19 +15,22 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { enthalpy, enthalpyToSpecificHumidity } from './enthalpy';
 import { temperatureToMaximumSpecificHumidity } from './temperature-to-maximum-specific-humidity';
 
-describe('temperatureToMaximumSpecificHumidity', () => {
-  const testCases = [
-    [101325, 20, 14.699054061706954],
-    [101325, 0, 3.7751266016292133],
-    [101325, -1, 3.4738170173133707],
-    [101325, -20, 0.6342890248947272],
-  ];
-
-  it.each(testCases)('given air pressure=%p temperature=%p returns %p', (airPressure, temperature, expected) => {
-    const specificHumidity = temperatureToMaximumSpecificHumidity(airPressure, temperature);
-
-    expect(specificHumidity).toBe(expected);
-  });
-});
+/**
+ * Calculate specific humidity from air pressure, temperature and wet bulb temperature.
+ * @param airPressure Air pressure in [Pa].
+ * @param temperature Temperature in [°C].
+ * @param wetBulbTemperature Wet bulb temperature in [°C].
+ * @returns Specific humidity in [g/kg].
+ */
+export function wetBulbTemperatureToSpecificHumidity(
+  airPressure: number,
+  temperature: number,
+  wetBulbTemperature: number
+): number {
+  const maxSpecificHumidity = temperatureToMaximumSpecificHumidity(airPressure, wetBulbTemperature);
+  const ent = enthalpy(wetBulbTemperature, maxSpecificHumidity);
+  return enthalpyToSpecificHumidity(ent, temperature);
+}

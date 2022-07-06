@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["psychrometrics"],
+  "cSpell.words": ["Pluciński", "psychrometrics"],
   "jest.autoRun": {
     "watch": true,
     "onSave": "test-file",

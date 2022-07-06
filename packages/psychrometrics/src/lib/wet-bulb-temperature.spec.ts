@@ -15,19 +15,26 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { temperatureToMaximumSpecificHumidity } from './temperature-to-maximum-specific-humidity';
+import { Initializer } from './initializer';
+import { wetBulbTemperature } from './wet-bulb-temperature';
 
-describe('temperatureToMaximumSpecificHumidity', () => {
+describe('wetBulbTemperature', () => {
+  beforeAll(() => {
+    Initializer.initialize(2);
+  });
+
   const testCases = [
-    [101325, 20, 14.699054061706954],
-    [101325, 0, 3.7751266016292133],
-    [101325, -1, 3.4738170173133707],
-    [101325, -20, 0.6342890248947272],
+    [101325, 20, 8.736841601662796, 15.09927747192241],
+    [101325, 0, 3.7751266016292133, 0],
+    [101325, -20, 0.3804182346564335, -20.542690827750253],
   ];
 
-  it.each(testCases)('given air pressure=%p temperature=%p returns %p', (airPressure, temperature, expected) => {
-    const specificHumidity = temperatureToMaximumSpecificHumidity(airPressure, temperature);
+  it.each(testCases)(
+    'given air pressure=%p temperature=%p specific humidity=%p returns %p',
+    (airPressure, temperature, specificHumidity, expected) => {
+      const wbt = wetBulbTemperature(airPressure, temperature, specificHumidity);
 
-    expect(specificHumidity).toBe(expected);
-  });
+      expect(wbt).toBe(expected);
+    }
+  );
 });
