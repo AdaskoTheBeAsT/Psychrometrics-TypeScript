@@ -31,19 +31,19 @@ export const EvaporationHeat = 2501;
 export const GravitationalAcceleration = 9.80665;
 
 /**
- * Molecular weight of dry air [kg/mol]
+ * Molar mass of dry air [kg/mol]
  */
-export const MolecularWeightOfDryAir = 0.0289647;
+export const MolarMassOfDryAir = 0.0289647;
 
 /**
- * Molecular weight of water vapor [kg/mol]
+ * Molar mass of water vapor [kg/mol]
  */
-export const MolecularWeightOfWaterVapor = 0.01801528;
+export const MolarMassOfWaterVapor = 0.01801528;
 
 /**
- * Molecular weight water to dry air ratio
+ * Molar mass water to dry air ratio
  */
-export const MolecularWeightRatio = MolecularWeightOfWaterVapor / MolecularWeightOfDryAir;
+export const MolarMassRatio = MolarMassOfWaterVapor / MolarMassOfDryAir;
 
 /**
  * Specific heat capacity of air below 0 [kJ/kg°C]
@@ -78,9 +78,9 @@ export const UniversalGasConstant = 8.31446261815324;
 /**
  * Gas constant for dry air [J/(kg·K)]
  */
-export const GasConstantForDryAir = UniversalGasConstant / MolecularWeightOfDryAir;
+export const GasConstantForDryAir = UniversalGasConstant / MolarMassOfDryAir;
 
 /**
  * Gas constant for dry air [J/(kg·K)]
  */
-export const GasConstantForWaterVapor = UniversalGasConstant / MolecularWeightOfWaterVapor;
+export const GasConstantForWaterVapor = UniversalGasConstant / MolarMassOfWaterVapor;

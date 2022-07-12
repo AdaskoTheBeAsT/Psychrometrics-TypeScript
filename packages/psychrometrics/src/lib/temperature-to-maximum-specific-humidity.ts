@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MolecularWeightRatio } from './constants';
+import { MolarMassRatio } from './constants';
 import { temperatureToSaturationVaporPressure } from './temperature-to-saturation-vapor-pressure';
 
 /**
@@ -26,6 +26,6 @@ import { temperatureToSaturationVaporPressure } from './temperature-to-saturatio
  */
 export function temperatureToMaximumSpecificHumidity(airPressure: number, temperature: number): number {
   const saturatedPress = temperatureToSaturationVaporPressure(temperature);
-  const saturatedSpecificHumidity = (MolecularWeightRatio * saturatedPress) / (airPressure - saturatedPress);
+  const saturatedSpecificHumidity = (MolarMassRatio * saturatedPress) / (airPressure - saturatedPress);
   return 1000.0 * saturatedSpecificHumidity;
 }

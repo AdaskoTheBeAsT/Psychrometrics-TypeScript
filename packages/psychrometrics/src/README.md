@@ -4,6 +4,7 @@
 
 ### Psychrometrics formulas. Formulas converts
 
+- [air density](doc/air-density.md)
 - [air pressure to attitude (above mean sea level)](doc/air-pressure-to-altitude.md)
 - [attitude (above mean sea level) to air pressure](doc/altitude-to-air-pressure.md)
 - relative to specific humidity

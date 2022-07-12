@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { GasConstantForDryAir, MolecularWeightOfDryAir, MolecularWeightOfWaterVapor } from './constants';
+import { GasConstantForDryAir, MolarMassOfDryAir, MolarMassOfWaterVapor } from './constants';
 
 /**
  * Calculates air density [kg/m³].
@@ -31,6 +31,6 @@ export function airDensity(airPressure: number, temperature: number, specificHum
     ((1 + specificHumidityNormalized) * airPressure) /
     (GasConstantForDryAir *
       temperatureKelvin *
-      (1 + (MolecularWeightOfDryAir / MolecularWeightOfWaterVapor) * specificHumidityNormalized))
+      (1 + (MolarMassOfDryAir / MolarMassOfWaterVapor) * specificHumidityNormalized))
   );
 }

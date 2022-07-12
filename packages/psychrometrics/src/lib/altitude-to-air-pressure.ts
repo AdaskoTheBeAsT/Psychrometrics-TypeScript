@@ -18,7 +18,7 @@
 import {
   AveragePressureAtSeaLevel,
   GravitationalAcceleration,
-  MolecularWeightOfDryAir,
+  MolarMassOfDryAir,
   StandardTemperature,
   TemperatureLapseRate,
   UniversalGasConstant,
@@ -40,7 +40,7 @@ export function altitudeToAirPressure(altitude: number): number {
     AveragePressureAtSeaLevel *
     Math.pow(
       1 + (TemperatureLapseRate * altitude) / StandardTemperature,
-      (-GravitationalAcceleration * MolecularWeightOfDryAir) / (UniversalGasConstant * TemperatureLapseRate)
+      (-GravitationalAcceleration * MolarMassOfDryAir) / (UniversalGasConstant * TemperatureLapseRate)
     )
   );
 }
