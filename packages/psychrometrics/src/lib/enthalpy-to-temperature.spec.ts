@@ -15,13 +15,22 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Calculate enthalpy from temperature and specific humidity.
- * @param temperature Temperature in [°C].
- * @param specificHumidity Specific humidity in [g/kg].
- * @returns Enthalpy in [kJ/kg].
- */
-export function temperatureAndSpecificHumidityToEnthalpy(temperature: number, specificHumidity: number): number {
-  const specificHumidityNormalized = specificHumidity / 1000.0;
-  return 1.006 * temperature + specificHumidityNormalized * (2501.0 + 1.805 * temperature);
-}
+import { enthalpyToTemperature } from './enthalpy-to-temperature';
+
+describe('enthalpyToTemperature', () => {
+  const testCases = [
+    [-0.026, 0, 0],
+    [0.2241, 0.1, 0],
+    [9.415591630674662, 3.7751266016292133, 0],
+    [-1.005, 0, -1],
+    [7.676624536988883, 3.4738170173133707, -1.0000000000000002],
+    [42.28635661669985, 8.736841601662796, 20.00000000000001],
+    [-19.162573386159615, 0.3804182346564335, -20],
+  ];
+
+  it.each(testCases)('given enthalpy=%p specific humidity=%p returns %p', (e, specificHumidity, expected) => {
+    const temperature = enthalpyToTemperature(e, specificHumidity);
+
+    expect(temperature).toBe(expected);
+  });
+});

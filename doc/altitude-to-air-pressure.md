@@ -1,6 +1,6 @@
 # Altitude to air pressure
 
-Formula which converts altitude to air pressure
+## Formula which converts altitude to air pressure
 
 $$
   \huge{P=P_b* \left [1+ \frac{L_b}{T_b} * (h-h_b) \right ]^{\frac{-g_0*M}{R*L_b}}}

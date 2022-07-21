@@ -15,31 +15,26 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
-  EvaporationHeat,
-  SpecificHeatCapacityOfAirBelowZero,
-  SpecificHeatCapacityOfAirEqAboveZero,
-  SpecificHeatCapacityOfWater,
-} from './constants';
+import { GasConstantForDryAir, MolarMassOfDryAir, MolarMassOfWaterVapor } from './constants';
 
 /**
- * Calculates enthalpy [J/kg] from temperature [°C] and specific humidity [g/kg].
+ * Calculates air density by specific humidity [kg/m³].
+ * @param airPressure Air pressure [Pa].
  * @param temperature Temperature [°C].
  * @param specificHumidity Specific humidity [g/kg].
- * @returns Enthalpy [kJ/kg].
+ * @returns Air density [kg/m³].
  */
-export function enthalpy(temperature: number, specificHumidity: number): number {
+export function airDensityBySpecificHumidity(
+  airPressure: number,
+  temperature: number,
+  specificHumidity: number
+): number {
   const specificHumidityNormalized = specificHumidity / 1000;
-  if (temperature >= 0) {
-    return (
-      SpecificHeatCapacityOfAirEqAboveZero * temperature -
-      0.026 +
-      specificHumidityNormalized * (EvaporationHeat + SpecificHeatCapacityOfWater * temperature)
-    );
-  }
-
+  const temperatureKelvin = temperature + 273.15;
   return (
-    SpecificHeatCapacityOfAirBelowZero * temperature +
-    specificHumidityNormalized * (EvaporationHeat + SpecificHeatCapacityOfWater * temperature)
+    ((1 + specificHumidityNormalized) * airPressure) /
+    (GasConstantForDryAir *
+      temperatureKelvin *
+      (1 + (MolarMassOfDryAir / MolarMassOfWaterVapor) * specificHumidityNormalized))
   );
 }

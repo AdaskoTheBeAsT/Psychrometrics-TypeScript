@@ -15,23 +15,21 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { relativeToSpecificHumidity } from './relative-to-specific-humidity';
+import { airDensityByRelativeHumidity } from './air-density-by-relative-humidity';
 
-describe('specificToRelativeHumidity', () => {
+describe('airDensityByRelativeHumidity', () => {
   const testCases = [
-    [101325, 32, 60, 18.038226360479687],
-    [101325, 20, 60, 8.736841601662796],
-    [101325, 0, 60, 2.2595900446069703],
-    [101325, -20, 60, 0.3804182346564335],
-    [101325, -50, 60, 0.014503477444163701],
+    [101325, 20, 60, 1.1977919138004267],
+    [101325, 0, 100, 1.2893138971367555],
+    [101325, -20, 60, 1.394033356647547],
   ];
 
   it.each(testCases)(
     'given air pressure=%p temperature=%p relative humidity=%p returns %p',
     (airPressure, temperature, relativeHumidity, expected) => {
-      const specificHumidity = relativeToSpecificHumidity(airPressure, temperature, relativeHumidity);
+      const density = airDensityByRelativeHumidity(airPressure, temperature, relativeHumidity);
 
-      expect(specificHumidity).toBe(expected);
+      expect(density).toBe(expected);
     }
   );
 });

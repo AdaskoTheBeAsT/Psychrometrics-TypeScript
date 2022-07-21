@@ -1,7 +1,7 @@
 {
   "name": "@adaskothebeast/psychrometrics",
-  "version": "2.0.0",
-  "license": "AGPL-3.0 license",
+  "version": "3.0.0",
+  "license": "AGPL-3.0-or-later",
   "description": "Psychrometrics interpolation for TypeScript",
   "author": "Adam Pluciński <adaskothebeast@gmail.com>",
   "homepage": "https://github.com/AdaskoTheBeAsT/Psychrometrics-TypeScript",

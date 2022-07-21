@@ -15,21 +15,22 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { airDensity } from './air-density';
+import { enthalpyToSpecificHumidity } from './enthalpy-to-specific-humidity';
 
-describe('airDensity', () => {
+describe('enthalpyToSpecificHumidity', () => {
   const testCases = [
-    [101325, 20, 8.736841601662796, 1.1977919138004267],
-    [101325, 0, 3.7751266016292133, 1.2893138971367555],
-    [101325, -20, 0.3804182346564335, 1.3940333566475471],
+    [-0.026, 0, 0],
+    [0.2241, 0, 0.09999999999999999],
+    [9.415591630674662, 0, 3.775126601629213],
+    [-1.005, -1, 0],
+    [7.676624536988883, -1, 3.4738170173133707],
+    [42.28635661669985, 20, 8.736841601662798],
+    [-19.162573386159615, -20, 0.3804182346564335],
   ];
 
-  it.each(testCases)(
-    'given air pressure=%p temperature=%p specific humidity=%p returns %p',
-    (airPressure, temperature, specificHumidity, expected) => {
-      const density = airDensity(airPressure, temperature, specificHumidity);
+  it.each(testCases)('given enthalpy=%p temperature=%p returns %p', (e, temperature, expected) => {
+    const specificHumidity = enthalpyToSpecificHumidity(e, temperature);
 
-      expect(density).toBe(expected);
-    }
-  );
+    expect(specificHumidity).toBe(expected);
+  });
 });

@@ -15,7 +15,8 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { enthalpy, enthalpyToSpecificHumidity } from './enthalpy';
+import { enthalpy } from './enthalpy';
+import { enthalpyToSpecificHumidity } from './enthalpy-to-specific-humidity';
 import { temperatureToMaximumSpecificHumidity } from './temperature-to-maximum-specific-humidity';
 
 /**

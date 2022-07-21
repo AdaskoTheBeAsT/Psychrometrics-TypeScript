@@ -16,10 +16,10 @@
  */
 
 import { dewPointTemperature } from './dew-point-temperature';
-import { enthalpy, enthalpyToSpecificHumidity, enthalpyToTemperature } from './enthalpy';
+import { enthalpy } from './enthalpy';
+import { enthalpyToSpecificHumidity } from './enthalpy-to-specific-humidity';
+import { enthalpyToTemperature } from './enthalpy-to-temperature';
 import { temperatureToMaximumSpecificHumidity } from './temperature-to-maximum-specific-humidity';
-
-const epsilon = 0.00001;
 
 /**
  * Calculate wet bulb temperature from air pressure, temperature and specific humidity.
@@ -28,39 +28,42 @@ const epsilon = 0.00001;
  * @param specificHumidity Specific humidity in [g/kg].
  * @returns Wet bulb temperature in [°C].
  */
-export function wetBulbTemperature(airPressure: number, temperature: number, specificHumidity: number): number {
+export function wetBulbTemperature(
+  airPressure: number,
+  temperature: number,
+  specificHumidity: number,
+  epsilon = 0.00001
+): number {
   let temperaturePrev = temperature;
   let specificHumidityPrev = specificHumidity;
   if (temperature >= 0) {
     let temperatureDifference: number;
-    let temperatureNext: number;
     do {
       const dp = dewPointTemperature(airPressure, specificHumidityPrev);
       temperatureDifference = (temperaturePrev - dp) / 2.0;
       if (temperaturePrev >= dp) {
-        temperatureNext = temperaturePrev - Math.abs(temperatureDifference);
+        temperaturePrev -= Math.abs(temperatureDifference);
       } else {
-        temperatureNext = temperaturePrev + Math.abs(temperatureDifference);
+        temperaturePrev += Math.abs(temperatureDifference);
       }
 
-      temperaturePrev = temperatureNext;
-      specificHumidityPrev = enthalpyToSpecificHumidity(enthalpy(temperature, specificHumidity), temperaturePrev);
+      const ent = enthalpy(temperature, specificHumidity);
+      specificHumidityPrev = enthalpyToSpecificHumidity(ent, temperaturePrev);
     } while (Math.abs(temperatureDifference) > epsilon);
   } else {
     let specificHumidityDifference;
-    let specificHumidityNext;
     do {
       const maxSpecificHumidity = temperatureToMaximumSpecificHumidity(airPressure, temperaturePrev);
       specificHumidityDifference = (maxSpecificHumidity - specificHumidityPrev) / 2.0;
       if (specificHumidityPrev >= maxSpecificHumidity) {
-        specificHumidityNext = specificHumidityPrev - Math.abs(specificHumidityDifference);
+        specificHumidityPrev -= Math.abs(specificHumidityDifference);
       } else {
-        specificHumidityNext = specificHumidityPrev + Math.abs(specificHumidityDifference);
+        specificHumidityPrev += Math.abs(specificHumidityDifference);
       }
 
-      specificHumidityPrev = specificHumidityNext;
-      temperaturePrev = enthalpyToTemperature(enthalpy(temperature, specificHumidity), specificHumidityPrev);
-    } while (Math.abs(specificHumidityDifference) > epsilon);
+      const ent = enthalpy(temperature, specificHumidity);
+      temperaturePrev = enthalpyToTemperature(ent, specificHumidityPrev);
+    } while (Math.abs(specificHumidityDifference / specificHumidityPrev) > epsilon);
   }
 
   return temperaturePrev;

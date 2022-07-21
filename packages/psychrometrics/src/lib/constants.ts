@@ -32,6 +32,7 @@ export const GravitationalAcceleration = 9.80665;
 
 /**
  * Molar mass of dry air [kg/mol]
+ * https://www.engineeringtoolbox.com/air-composition-d_212.html
  */
 export const MolarMassOfDryAir = 0.0289647;
 
@@ -66,12 +67,14 @@ export const SpecificHeatCapacityOfWater = 1.84;
 export const StandardTemperature = 288.15;
 
 /**
- * Temperature lapse rate [K/m]
+ * Temperature lapse rate [°K/m]
  */
 export const TemperatureLapseRate = -0.0065;
 
 /**
- * Universal gas constant J/(mol·K) or (N·m)/(mol·K)
+ * Universal gas constant J/(mol·°K) or (N·m)/(mol·°K)
+ * Redefined in 2019
+ * as per https://sciencenotes.org/ideal-gas-constant-r-universal-gas-constant/
  */
 export const UniversalGasConstant = 8.31446261815324;
 

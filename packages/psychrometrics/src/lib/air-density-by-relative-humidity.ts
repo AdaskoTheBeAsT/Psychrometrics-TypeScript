@@ -15,22 +15,24 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { GasConstantForDryAir, MolarMassOfDryAir, MolarMassOfWaterVapor } from './constants';
+import { GasConstantForDryAir, GasConstantForWaterVapor } from './constants';
+import { temperatureToSaturationVaporPressure } from './temperature-to-saturation-vapor-pressure';
 
 /**
- * Calculates air density [kg/m³].
+ * Calculates air density by relative humidity [kg/m³].
  * @param airPressure Air pressure [Pa].
  * @param temperature Temperature [°C].
- * @param specificHumidity Specific humidity [g/kg].
+ * @param relativeHumidity Relative humidity [%].
  * @returns Air density [kg/m³].
  */
-export function airDensity(airPressure: number, temperature: number, specificHumidity: number): number {
-  const specificHumidityNormalized = specificHumidity / 1000;
+export function airDensityByRelativeHumidity(
+  airPressure: number,
+  temperature: number,
+  relativeHumidity: number
+): number {
+  const svp = temperatureToSaturationVaporPressure(temperature);
+  const pv = (svp * relativeHumidity) / 100;
+  const pd = airPressure - pv;
   const temperatureKelvin = temperature + 273.15;
-  return (
-    ((1 + specificHumidityNormalized) * airPressure) /
-    (GasConstantForDryAir *
-      temperatureKelvin *
-      (1 + (MolarMassOfDryAir / MolarMassOfWaterVapor) * specificHumidityNormalized))
-  );
+  return pd / (GasConstantForDryAir * temperatureKelvin) + pv / (GasConstantForWaterVapor * temperatureKelvin);
 }

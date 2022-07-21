@@ -2,19 +2,24 @@
 
 ## Description
 
-### Psychrometrics formulas. Formulas converts
+### Psychrometrics formulas
 
-- [air density](doc/air-density.md)
-- [air pressure to attitude (above mean sea level)](doc/air-pressure-to-altitude.md)
-- [attitude (above mean sea level) to air pressure](doc/altitude-to-air-pressure.md)
-- relative to specific humidity
+- [air density by relative humidity](doc/air-density-by-relative-humidity.md)
+- [air density by specific humidity](doc/air-density-by-specific-humidity.md)
+- [air pressure to altitude (above mean sea level)](doc/air-pressure-to-altitude.md)
+- [altitude (above mean sea level) to air pressure](doc/altitude-to-air-pressure.md)
+- [constants](doc/constants)
+- [dew point temperature](doc/dew-point-temperature.md)
+- [relative to specific humidity](doc/relative-to-specific-humidity.md)
 - [saturation vapor pressure to temperature](doc/saturation-vapor-pressure-to-temperature.md)
-- specific and relative humidity to temperature
-- specific to relative humidity
-- temperature and specific humidity to enthalpy
+- [specific and relative humidity to temperature](doc/specific-and-relative-humidity-to-temperature.md)
+- [specific to relative humidity](doc/specific-to-relative-humidity.md)
+- [temperature to maximum specific humidity](doc/temperature-to-maximum-specific-humidity.md)
 - [temperature to saturation vapor pressure of water](doc/temperature-to-saturation-vapor-pressure-of-water.md)
 - [temperature to saturation vapor pressure of ice](doc/temperature-to-saturation-vapor-pressure-of-ice.md)
 - [temperature to saturation vapor pressure](doc/temperature-to-saturation-vapor-pressure.md)
+- [wet bulb temperature to specific humidity](doc/wet-bulb-temperature-to-specific-humidity.md)
+- [wet bulb temperature](doc/wet-bulb-temperature.md)
 
 ## Installation
 
