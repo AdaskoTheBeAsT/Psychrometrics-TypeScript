@@ -10,4 +10,4 @@ where
 
 - $\omega$ - specific humidity $[\frac{g}{kg}]$
 - $P_a$ - atmospheric pressure $[Pa]$
-- MolarMassRatio - $M_{ratio} = 0.6219736437801877$
+- $M_{ratio}$ - MolarMassRatio = 0.6219736437801877
