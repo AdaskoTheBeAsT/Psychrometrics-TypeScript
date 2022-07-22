@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { GasConstantForDryAir, GasConstantForWaterVapor } from './constants';
+import { GAS_CONSTANT_FOR_DRY_AIR, GAS_CONSTANT_FOR_WATER_VAPOR } from './constants';
 import { temperatureToSaturationVaporPressure } from './temperature-to-saturation-vapor-pressure';
 
 /**
@@ -34,5 +34,5 @@ export function airDensityByRelativeHumidity(
   const pv = (svp * relativeHumidity) / 100;
   const pd = airPressure - pv;
   const temperatureKelvin = temperature + 273.15;
-  return pd / (GasConstantForDryAir * temperatureKelvin) + pv / (GasConstantForWaterVapor * temperatureKelvin);
+  return pd / (GAS_CONSTANT_FOR_DRY_AIR * temperatureKelvin) + pv / (GAS_CONSTANT_FOR_WATER_VAPOR * temperatureKelvin);
 }

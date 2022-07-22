@@ -18,72 +18,72 @@
 /**
  * Average atmospheric pressure at sea level [Pa]
  */
-export const AveragePressureAtSeaLevel = 101325.0;
+export const AVERAGE_PRESSURE_AT_SEA_LEVEL = 101325.0;
 
 /**
  * Evaporation heat [kJ/kg]
  */
-export const EvaporationHeat = 2501;
+export const EVAPORATION_HEAT = 2501;
 
 /**
  * Gravitational acceleration [m/s²]
  */
-export const GravitationalAcceleration = 9.80665;
+export const GRAVITATIONAL_ACCELERATION = 9.80665;
 
 /**
  * Molar mass of dry air [kg/mol]
  * https://www.engineeringtoolbox.com/air-composition-d_212.html
  */
-export const MolarMassOfDryAir = 0.0289647;
+export const MOLAR_MASS_OF_DRY_AIR = 0.0289647;
 
 /**
  * Molar mass of water vapor [kg/mol]
  */
-export const MolarMassOfWaterVapor = 0.01801528;
+export const MOLAR_MASS_OF_WATER_VAPOR = 0.01801528;
 
 /**
  * Molar mass water to dry air ratio
  */
-export const MolarMassRatio = MolarMassOfWaterVapor / MolarMassOfDryAir;
+export const MOLAR_MASS_RATIO = MOLAR_MASS_OF_WATER_VAPOR / MOLAR_MASS_OF_DRY_AIR;
 
 /**
- * Specific heat capacity of air below 0 [kJ/kg°C]
+ * Specific heat capacity of air below 0 [kJ/kg·°C]
  */
-export const SpecificHeatCapacityOfAirBelowZero = 1.005;
+export const SPECIFIC_HEAT_CAPACITY_OF_AIR_BELOW_ZERO = 1.005;
 
 /**
- * Specific heat capacity of air equal or above 0 [kJ/kg°C]
+ * Specific heat capacity of air equal or above 0 [kJ/kg·°C]
  */
-export const SpecificHeatCapacityOfAirEqAboveZero = 1.007;
+export const SPECIFIC_HEAT_CAPACITY_OF_AIR_EQ_ABOVE_ZERO = 1.007;
 
 /**
- * Specific heat capacity of water [kJ/kg°C]
+ * Specific heat capacity of water [kJ/kg·°C]
  */
-export const SpecificHeatCapacityOfWater = 1.84;
+export const SPECIFIC_HEAT_CAPACITY_OF_WATER = 1.84;
 
 /**
  * Standard temperature (15°C) in Kelvin [°K]
  */
-export const StandardTemperature = 288.15;
+export const STANDARD_TEMPERATURE = 288.15;
 
 /**
  * Temperature lapse rate [°K/m]
  */
-export const TemperatureLapseRate = -0.0065;
+export const TEMPERATURE_LAPSE_RATE = -0.0065;
 
 /**
  * Universal gas constant J/(mol·°K) or (N·m)/(mol·°K)
  * Redefined in 2019
  * as per https://sciencenotes.org/ideal-gas-constant-r-universal-gas-constant/
  */
-export const UniversalGasConstant = 8.31446261815324;
+export const UNIVERSAL_GAS_CONSTANT = 8.31446261815324;
 
 /**
  * Gas constant for dry air [J/(kg·K)]
  */
-export const GasConstantForDryAir = UniversalGasConstant / MolarMassOfDryAir;
+export const GAS_CONSTANT_FOR_DRY_AIR = UNIVERSAL_GAS_CONSTANT / MOLAR_MASS_OF_DRY_AIR;
 
 /**
  * Gas constant for dry air [J/(kg·K)]
  */
-export const GasConstantForWaterVapor = UniversalGasConstant / MolarMassOfWaterVapor;
+export const GAS_CONSTANT_FOR_WATER_VAPOR = UNIVERSAL_GAS_CONSTANT / MOLAR_MASS_OF_WATER_VAPOR;

@@ -16,12 +16,12 @@
  */
 
 import {
-  AveragePressureAtSeaLevel,
-  GravitationalAcceleration,
-  MolarMassOfDryAir,
-  StandardTemperature,
-  TemperatureLapseRate,
-  UniversalGasConstant,
+  AVERAGE_PRESSURE_AT_SEA_LEVEL,
+  GRAVITATIONAL_ACCELERATION,
+  MOLAR_MASS_OF_DRY_AIR,
+  STANDARD_TEMPERATURE,
+  TEMPERATURE_LAPSE_RATE,
+  UNIVERSAL_GAS_CONSTANT,
 } from './constants';
 
 /**
@@ -37,10 +37,10 @@ export function altitudeToAirPressure(altitude: number): number {
     throw new Error('Altitude too low. Should be higher than -430.5[m]');
   }
   return (
-    AveragePressureAtSeaLevel *
+    AVERAGE_PRESSURE_AT_SEA_LEVEL *
     Math.pow(
-      1 + (TemperatureLapseRate * altitude) / StandardTemperature,
-      (-GravitationalAcceleration * MolarMassOfDryAir) / (UniversalGasConstant * TemperatureLapseRate)
+      1 + (TEMPERATURE_LAPSE_RATE * altitude) / STANDARD_TEMPERATURE,
+      (-GRAVITATIONAL_ACCELERATION * MOLAR_MASS_OF_DRY_AIR) / (UNIVERSAL_GAS_CONSTANT * TEMPERATURE_LAPSE_RATE)
     )
   );
 }

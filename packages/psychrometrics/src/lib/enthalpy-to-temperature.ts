@@ -1,8 +1,8 @@
 import {
-  EvaporationHeat,
-  SpecificHeatCapacityOfAirBelowZero,
-  SpecificHeatCapacityOfAirEqAboveZero,
-  SpecificHeatCapacityOfWater,
+  EVAPORATION_HEAT,
+  SPECIFIC_HEAT_CAPACITY_OF_AIR_BELOW_ZERO,
+  SPECIFIC_HEAT_CAPACITY_OF_AIR_EQ_ABOVE_ZERO,
+  SPECIFIC_HEAT_CAPACITY_OF_WATER,
 } from './constants';
 
 /**
@@ -14,15 +14,15 @@ import {
 export function enthalpyToTemperature(e: number, specificHumidity: number): number {
   const specificHumidityNormalized = specificHumidity / 1000;
   const t1 =
-    (e + 0.026 - EvaporationHeat * specificHumidityNormalized) /
-    (SpecificHeatCapacityOfAirEqAboveZero + SpecificHeatCapacityOfWater * specificHumidityNormalized);
+    (e + 0.026 - EVAPORATION_HEAT * specificHumidityNormalized) /
+    (SPECIFIC_HEAT_CAPACITY_OF_AIR_EQ_ABOVE_ZERO + SPECIFIC_HEAT_CAPACITY_OF_WATER * specificHumidityNormalized);
 
   if (t1 >= 0) {
     return t1;
   }
 
   return (
-    (e - EvaporationHeat * specificHumidityNormalized) /
-    (SpecificHeatCapacityOfAirBelowZero + SpecificHeatCapacityOfWater * specificHumidityNormalized)
+    (e - EVAPORATION_HEAT * specificHumidityNormalized) /
+    (SPECIFIC_HEAT_CAPACITY_OF_AIR_BELOW_ZERO + SPECIFIC_HEAT_CAPACITY_OF_WATER * specificHumidityNormalized)
   );
 }

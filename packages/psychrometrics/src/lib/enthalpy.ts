@@ -16,10 +16,10 @@
  */
 
 import {
-  EvaporationHeat,
-  SpecificHeatCapacityOfAirBelowZero,
-  SpecificHeatCapacityOfAirEqAboveZero,
-  SpecificHeatCapacityOfWater,
+  EVAPORATION_HEAT,
+  SPECIFIC_HEAT_CAPACITY_OF_AIR_BELOW_ZERO,
+  SPECIFIC_HEAT_CAPACITY_OF_AIR_EQ_ABOVE_ZERO,
+  SPECIFIC_HEAT_CAPACITY_OF_WATER,
 } from './constants';
 
 /**
@@ -32,14 +32,14 @@ export function enthalpy(temperature: number, specificHumidity: number): number 
   const specificHumidityNormalized = specificHumidity / 1000;
   if (temperature >= 0) {
     return (
-      SpecificHeatCapacityOfAirEqAboveZero * temperature -
+      SPECIFIC_HEAT_CAPACITY_OF_AIR_EQ_ABOVE_ZERO * temperature -
       0.026 +
-      specificHumidityNormalized * (EvaporationHeat + SpecificHeatCapacityOfWater * temperature)
+      specificHumidityNormalized * (EVAPORATION_HEAT + SPECIFIC_HEAT_CAPACITY_OF_WATER * temperature)
     );
   }
 
   return (
-    SpecificHeatCapacityOfAirBelowZero * temperature +
-    specificHumidityNormalized * (EvaporationHeat + SpecificHeatCapacityOfWater * temperature)
+    SPECIFIC_HEAT_CAPACITY_OF_AIR_BELOW_ZERO * temperature +
+    specificHumidityNormalized * (EVAPORATION_HEAT + SPECIFIC_HEAT_CAPACITY_OF_WATER * temperature)
   );
 }

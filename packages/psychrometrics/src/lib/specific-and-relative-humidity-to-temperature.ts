@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MolarMassRatio } from './constants';
+import { MOLAR_MASS_RATIO } from './constants';
 import { saturationVaporPressureToTemperature } from './saturation-vapor-pressure-to-temperature';
 
 /**
@@ -34,7 +34,7 @@ export function specificAndRelativeHumidityToTemperature(
   const specificHumidityNormalized = specificHumidity / 1000.0;
   const ratio =
     specificHumidityNormalized /
-    (relativeHumidityNormalized + ((relativeHumidityNormalized - 1.0) * specificHumidityNormalized) / MolarMassRatio);
-  const saturationVaporPressure = (ratio * airPressure) / (MolarMassRatio + ratio);
+    (relativeHumidityNormalized + ((relativeHumidityNormalized - 1.0) * specificHumidityNormalized) / MOLAR_MASS_RATIO);
+  const saturationVaporPressure = (ratio * airPressure) / (MOLAR_MASS_RATIO + ratio);
   return saturationVaporPressureToTemperature(saturationVaporPressure);
 }

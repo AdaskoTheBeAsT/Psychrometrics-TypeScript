@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { GasConstantForDryAir, MolarMassOfDryAir, MolarMassOfWaterVapor } from './constants';
+import { GAS_CONSTANT_FOR_DRY_AIR, MOLAR_MASS_OF_DRY_AIR, MOLAR_MASS_OF_WATER_VAPOR } from './constants';
 
 /**
  * Calculates air density by specific humidity [kg/m³].
@@ -33,8 +33,8 @@ export function airDensityBySpecificHumidity(
   const temperatureKelvin = temperature + 273.15;
   return (
     ((1 + specificHumidityNormalized) * airPressure) /
-    (GasConstantForDryAir *
+    (GAS_CONSTANT_FOR_DRY_AIR *
       temperatureKelvin *
-      (1 + (MolarMassOfDryAir / MolarMassOfWaterVapor) * specificHumidityNormalized))
+      (1 + (MOLAR_MASS_OF_DRY_AIR / MOLAR_MASS_OF_WATER_VAPOR) * specificHumidityNormalized))
   );
 }

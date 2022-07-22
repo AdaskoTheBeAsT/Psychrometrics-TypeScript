@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MolarMassRatio } from './constants';
+import { MOLAR_MASS_RATIO } from './constants';
 import { saturationVaporPressureToTemperature } from './saturation-vapor-pressure-to-temperature';
 
 /**
@@ -26,6 +26,6 @@ import { saturationVaporPressureToTemperature } from './saturation-vapor-pressur
  */
 export function dewPointTemperature(airPressure: number, specificHumidity: number): number {
   const specificHumidityNormalized = specificHumidity / 1000.0;
-  const saturatedPress = (specificHumidityNormalized * airPressure) / (specificHumidityNormalized + MolarMassRatio);
+  const saturatedPress = (specificHumidityNormalized * airPressure) / (specificHumidityNormalized + MOLAR_MASS_RATIO);
   return saturationVaporPressureToTemperature(saturatedPress);
 }
