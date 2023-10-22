@@ -10,6 +10,26 @@
       "options": {
         "outputPath": "dist/libs/psychrometrics",
         "main": "libs/psychrometrics/src/index.ts",
+        "additionalEntryPoints": [
+          "libs/psychrometrics/src/air-density-by-relative-humidity.ts",
+          "libs/psychrometrics/src/air-density-by-specific-humidity.ts",
+          "libs/psychrometrics/src/air-pressure-to-altitude.ts",
+          "libs/psychrometrics/src/altitude-to-air-pressure.ts",
+          "libs/psychrometrics/src/constants.ts",
+          "libs/psychrometrics/src/dew-point-temperature.ts",
+          "libs/psychrometrics/src/enthalpy-to-specific-humidity.ts",
+          "libs/psychrometrics/src/enthalpy-to-temperature.ts",
+          "libs/psychrometrics/src/enthalpy.ts",
+          "libs/psychrometrics/src/initializer.ts",
+          "libs/psychrometrics/src/relative-to-specific-humidity.ts",
+          "libs/psychrometrics/src/saturation-vapor-pressure-to-temperature.ts",
+          "libs/psychrometrics/src/specific-and-relative-humidity-to-temperature.ts",
+          "libs/psychrometrics/src/specific-to-relative-humidity.ts",
+          "libs/psychrometrics/src/temperature-to-maximum-specific-humidity.ts",
+          "libs/psychrometrics/src/temperature-to-saturation-vapor-pressure.ts",
+          "libs/psychrometrics/src/wet-bulb-temperature-to-specific-humidity.ts",
+          "libs/psychrometrics/src/wet-bulb-temperature.ts"
+        ],
         "tsConfig": "libs/psychrometrics/tsconfig.lib.json",
         "assets": ["libs/psychrometrics/*.md"],
         "updateBuildableProjectDepsInPackageJson": true

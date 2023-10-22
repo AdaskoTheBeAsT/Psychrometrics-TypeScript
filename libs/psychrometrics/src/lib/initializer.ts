@@ -15,7 +15,11 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MonotoneCubicHermitInterpolation, NumberTuple, Spline } from '@adaskothebeast/splines';
+import {
+  MonotoneCubicHermitInterpolation,
+  NumberTuple,
+  Spline,
+} from '@adaskothebeast/splines/src/MonotoneCubicHermitInterpolation';
 
 import { temperatureToSaturationVaporPressure } from './temperature-to-saturation-vapor-pressure';
 

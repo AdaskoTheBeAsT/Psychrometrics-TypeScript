@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz#bd9154aec9983f77b3a034ecaa015c2e4201f6cf"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
-"@adaskothebeast/splines@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@adaskothebeast/splines/-/splines-2.1.1.tgz#0c416afd590b76036a02bbb16a3065682e7e44e6"
-  integrity sha512-gDrb1efYIlQW6QsF7sbqjwKUN2RXvSWNiP8MbFTvRRaWmg8rlzyKXsUAzzg50dP6kDMEq2Itj+OnYKtTkdkAKQ==
+"@adaskothebeast/splines@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@adaskothebeast/splines/-/splines-2.1.4.tgz#2d9c8477b29c9b392410668fbd171ac7e394f993"
+  integrity sha512-YUqg+QvwFsSt4eg1nCaswkjQ+c0q8oaRKIMpybvKdIXxR1lvRai3YAKR/zXLTUF+Ot22NxoVIk/lONxPQGbiFA==
   dependencies:
     tslib "^2.6.2"
 
