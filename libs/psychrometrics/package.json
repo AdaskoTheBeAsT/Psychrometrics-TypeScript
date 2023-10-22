@@ -1,0 +1,25 @@
+{
+  "name": "@adaskothebeast/psychrometrics",
+  "version": "4.1.0",
+  "license": "AGPL-3.0-or-later",
+  "description": "Psychrometrics interpolation for TypeScript",
+  "author": "Adam Pluciński <adaskothebeast@gmail.com>",
+  "homepage": "https://github.com/AdaskoTheBeAsT/Psychrometrics-TypeScript",
+  "keywords": [
+    "psychrometrics",
+    "thermodynamics",
+    "hvac",
+    "saturation water pressure"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdaskoTheBeAsT/Psychrometrics-TypeScript/Psychrometrics-TypeScript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AdaskoTheBeAsT/Psychrometrics-TypeScript/issues"
+  },
+  "dependencies": {
+    "@adaskothebeast/splines": "^2.1.1",
+    "tslib": "^2.6.2"
+  }
+}

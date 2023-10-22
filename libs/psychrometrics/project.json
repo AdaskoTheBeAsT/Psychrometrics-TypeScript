@@ -1,0 +1,113 @@
+{
+  "name": "psychrometrics",
+  "$schema": "..\\..\\node_modules\\nx\\schemas\\project-schema.json",
+  "sourceRoot": "libs/psychrometrics/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/psychrometrics",
+        "main": "libs/psychrometrics/src/index.ts",
+        "tsConfig": "libs/psychrometrics/tsconfig.lib.json",
+        "assets": ["libs/psychrometrics/*.md"],
+        "updateBuildableProjectDepsInPackageJson": true
+      }
+    },
+    "publish": {
+      "executor": "@nx/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs psychrometrics {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/psychrometrics/**/*.ts",
+          "libs/psychrometrics/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/psychrometrics"],
+      "options": {
+        "jestConfig": "libs/psychrometrics/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "copy-license-readme": {
+      "executor": "@nx/workspace:run-commands",
+      "options": {
+        "command": "shx cp ./README.md ./libs/psychrometrics/src/README.md && shx cp ./LICENSE ./libs/psychrometrics/src/LICENSE && shx cp -R ./doc ./libs/psychrometrics/src"
+      }
+    },
+    "package": {
+      "executor": "@nx/web:rollup",
+      "outputs": ["{options.outputPath}"],
+      "dependsOn": [
+        {
+          "target": "copy-license-readme"
+        }
+      ],
+      "options": {
+        "project": "libs/psychrometrics/package.json",
+        "outputPath": "dist/libs/psychrometrics",
+        "entryFile": "libs/psychrometrics/src/index.ts",
+        "tsConfig": "libs/psychrometrics/tsconfig.lib.json",
+        "compiler": "babel",
+        "umdName": "OtherName",
+        "external": ["typescript", "core-js", "@adaskothebeast/splines"],
+        "format": ["cjs", "esm"],
+        "assets": [
+          {
+            "glob": "*.md",
+            "input": "libs/psychrometrics/src/doc",
+            "output": "./doc"
+          },
+          {
+            "glob": "README.md",
+            "input": "libs/psychrometrics/src",
+            "output": "./"
+          }
+        ],
+        "updateBuildableProjectDepsInPackageJson": true
+      }
+    },
+    "bundle": {
+      "executor": "@nx/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "dependsOn": [
+        {
+          "target": "package"
+        }
+      ],
+      "options": {
+        "libraryName": "psychrometrics",
+        "libraryTargets": ["global", "commonjs", "amd", "umd"],
+        "index": "",
+        "tsConfig": "libs/psychrometrics/tsconfig.lib.json",
+        "main": "libs/psychrometrics/src/index.ts",
+        "outputPath": "dist/libs/psychrometrics/bundles",
+        "compiler": "babel",
+        "optimization": true,
+        "extractLicenses": true,
+        "runtimeChunk": false,
+        "vendorChunk": false,
+        "generateIndexHtml": false,
+        "commonChunk": false,
+        "namedChunks": false,
+        "webpackConfig": "webpack.config.js"
+      }
+    }
+  },
+  "tags": []
+}
