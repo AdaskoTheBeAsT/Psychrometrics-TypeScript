@@ -31,8 +31,7 @@
           "libs/psychrometrics/src/wet-bulb-temperature.ts"
         ],
         "tsConfig": "libs/psychrometrics/tsconfig.lib.json",
-        "assets": ["libs/psychrometrics/*.md"],
-        "updateBuildableProjectDepsInPackageJson": true
+        "assets": ["libs/psychrometrics/*.md"]
       }
     },
     "publish": {
@@ -60,8 +59,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/psychrometrics"],
       "options": {
-        "jestConfig": "libs/psychrometrics/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/psychrometrics/jest.config.ts"
       }
     },
     "copy-license-readme": {
@@ -98,8 +96,7 @@
             "input": "libs/psychrometrics/src",
             "output": "./"
           }
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
+        ]
       }
     },
     "bundle": {

@@ -5,6 +5,7 @@ export default {
   displayName: 'psychrometrics',
   preset: '../../jest.preset.js',
   globals: {},
+  testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]s$': [
       'ts-jest',
@@ -13,6 +14,7 @@ export default {
       },
     ],
   },
+  transformIgnorePatterns: ['/node_modules/(?!(@adaskothebeast/splines))'],
   moduleFileExtensions: ['ts', 'js', 'html'],
   collectCoverage: true,
   coverageDirectory: `../../${reportPath}coverage`,

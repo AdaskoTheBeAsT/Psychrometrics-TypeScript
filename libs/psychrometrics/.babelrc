@@ -2,7 +2,7 @@
   "exclude": "node_modules/**",
   "presets": [
     [
-      "@nrwl/js/babel",
+      "@nx/js/babel",
       {
         "useBuiltIns": "usage",
         "corejs": {
