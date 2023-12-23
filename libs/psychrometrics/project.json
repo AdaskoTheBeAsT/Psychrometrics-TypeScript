@@ -5,8 +5,7 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "executor": "@nx/rollup:rollup",
       "options": {
         "outputPath": "dist/libs/psychrometrics",
         "main": "libs/psychrometrics/src/index.ts",
@@ -31,7 +30,11 @@
           "libs/psychrometrics/src/wet-bulb-temperature.ts"
         ],
         "tsConfig": "libs/psychrometrics/tsconfig.lib.json",
-        "assets": ["libs/psychrometrics/*.md"]
+        "assets": [],
+        "format": ["esm", "cjs"],
+        "generateExportsField": true,
+        "compiler": "babel",
+        "external": ["core-js", "@adaskothebeast/splines"]
       }
     },
     "publish": {
@@ -47,13 +50,7 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": [
-          "libs/psychrometrics/**/*.ts",
-          "libs/psychrometrics/package.json"
-        ]
-      }
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
