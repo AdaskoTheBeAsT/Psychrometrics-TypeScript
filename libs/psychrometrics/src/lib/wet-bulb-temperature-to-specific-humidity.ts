@@ -18,6 +18,7 @@
 import { enthalpy } from './enthalpy';
 import { enthalpyToSpecificHumidity } from './enthalpy-to-specific-humidity';
 import { temperatureToMaximumSpecificHumidity } from './temperature-to-maximum-specific-humidity';
+import { validateAirPressure, validateTemperature, validateWetBulbTemperature } from './validation';
 
 /**
  * Calculate specific humidity from air pressure, temperature and wet bulb temperature.
@@ -25,12 +26,17 @@ import { temperatureToMaximumSpecificHumidity } from './temperature-to-maximum-s
  * @param temperature Temperature in [°C].
  * @param wetBulbTemperature Wet bulb temperature in [°C].
  * @returns Specific humidity in [g/kg].
+ * @throws TypeError if any parameter is not a finite number.
+ * @throws RangeError if any parameter is outside valid range.
  */
 export function wetBulbTemperatureToSpecificHumidity(
   airPressure: number,
   temperature: number,
-  wetBulbTemperature: number
+  wetBulbTemperature: number,
 ): number {
+  validateAirPressure(airPressure);
+  validateTemperature(temperature);
+  validateWetBulbTemperature(wetBulbTemperature, temperature);
   const maxSpecificHumidity = temperatureToMaximumSpecificHumidity(airPressure, wetBulbTemperature);
   const ent = enthalpy(wetBulbTemperature, maxSpecificHumidity);
   return enthalpyToSpecificHumidity(ent, temperature);

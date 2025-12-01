@@ -17,20 +17,40 @@
 
 import { Initializer } from './initializer';
 
+/** Minimum valid pressure for saturation vapor pressure to temperature conversion */
+const MIN_PRESSURE = 0.0014049735954231866;
+
+/** Maximum valid pressure for saturation vapor pressure to temperature conversion */
+const MAX_PRESSURE = 101416.99487195771;
+
 /**
  * Calculates temperature by saturation vapor pressure.
+ * Uses interpolation from precomputed values (requires Initializer.initialize() to be called first).
+ *
  * @param pressure Saturation vapor pressure [Pa].
  * @returns Temperature [°C].
+ * @throws TypeError if pressure is not a finite number.
+ * @throws RangeError if pressure is outside valid range.
+ * @throws InitializationRequiredError if Initializer.initialize() has not been called.
  */
 export function saturationVaporPressureToTemperature(pressure: number): number {
-  if (pressure < 0.0014049735954231866) {
-    throw new Error('Pressure to low. Needs to be higher than 0.0014049735954231866.');
+  if (!Number.isFinite(pressure)) {
+    throw new TypeError('Pressure must be a finite number.');
   }
 
-  if (pressure > 101416.99487195771) {
-    throw new Error('Pressure to high. Needs to be lower than 101416.99487195771.');
+  if (pressure < MIN_PRESSURE) {
+    throw new RangeError(
+      `Pressure too low (${pressure} Pa). Must be at least ${MIN_PRESSURE} Pa (corresponds to -100°C).`,
+    );
   }
 
+  if (pressure > MAX_PRESSURE) {
+    throw new RangeError(
+      `Pressure too high (${pressure} Pa). Must be at most ${MAX_PRESSURE} Pa (corresponds to 100°C).`,
+    );
+  }
+
+  // Handle edge case at exactly 100°C
   if (pressure >= 101416.99487) {
     return 100;
   }

@@ -17,15 +17,26 @@
 
 import { MOLAR_MASS_RATIO } from './constants';
 import { temperatureToSaturationVaporPressure } from './temperature-to-saturation-vapor-pressure';
+import { validateAirPressure, validatePressureRatio, validateTemperature } from './validation';
 
 /**
  * Converts temperature to maximum specific humidity.
  * @param airPressure Air pressure [Pa].
  * @param temperature Temperature [°C].
  * @returns Maximum specific humidity [g/kg].
+ * @throws TypeError if any parameter is not a finite number.
+ * @throws RangeError if any parameter is outside valid range.
+ * @throws Error if saturation vapor pressure exceeds air pressure.
  */
 export function temperatureToMaximumSpecificHumidity(airPressure: number, temperature: number): number {
+  validateAirPressure(airPressure);
+  validateTemperature(temperature);
+
   const saturatedPress = temperatureToSaturationVaporPressure(temperature);
+
+  // Guard against division by zero
+  validatePressureRatio(saturatedPress, airPressure);
+
   const saturatedSpecificHumidity = (MOLAR_MASS_RATIO * saturatedPress) / (airPressure - saturatedPress);
-  return 1000.0 * saturatedSpecificHumidity;
+  return 1000 * saturatedSpecificHumidity;
 }

@@ -25,22 +25,28 @@ import {
 } from './constants';
 
 /**
- * Converts altitude (above mean sea level) to air pressure
+ * Converts altitude (above mean sea level) to air pressure.
+ * Valid for altitudes from -430.5m (Dead Sea shore) to 8848m (Mt. Everest).
  * @param altitude meters above mean see level [m]
  * @returns air pressure [Pa]
+ * @throws TypeError if altitude is not a finite number.
+ * @throws RangeError if altitude is outside valid range.
  */
 export function altitudeToAirPressure(altitude: number): number {
+  if (!Number.isFinite(altitude)) {
+    throw new TypeError('Altitude must be a finite number.');
+  }
   if (altitude > 8848) {
-    throw new Error('Altitude too high. Should be lower than 8848[m]');
+    throw new RangeError(`Altitude too high (${altitude}m). Must be at most 8848m (Mt. Everest).`);
   }
   if (altitude < -430.5) {
-    throw new Error('Altitude too low. Should be higher than -430.5[m]');
+    throw new RangeError(`Altitude too low (${altitude}m). Must be at least -430.5m (Dead Sea shore).`);
   }
   return (
     AVERAGE_PRESSURE_AT_SEA_LEVEL *
     Math.pow(
       1 + (TEMPERATURE_LAPSE_RATE * altitude) / STANDARD_TEMPERATURE,
-      (-GRAVITATIONAL_ACCELERATION * MOLAR_MASS_OF_DRY_AIR) / (UNIVERSAL_GAS_CONSTANT * TEMPERATURE_LAPSE_RATE)
+      (-GRAVITATIONAL_ACCELERATION * MOLAR_MASS_OF_DRY_AIR) / (UNIVERSAL_GAS_CONSTANT * TEMPERATURE_LAPSE_RATE),
     )
   );
 }

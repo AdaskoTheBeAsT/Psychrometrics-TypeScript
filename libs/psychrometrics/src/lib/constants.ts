@@ -18,7 +18,7 @@
 /**
  * Average atmospheric pressure at sea level [Pa]
  */
-export const AVERAGE_PRESSURE_AT_SEA_LEVEL = 101325.0;
+export const AVERAGE_PRESSURE_AT_SEA_LEVEL = 101325;
 
 /**
  * Evaporation heat [kJ/kg]

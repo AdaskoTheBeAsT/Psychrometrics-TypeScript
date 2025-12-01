@@ -21,14 +21,19 @@ import {
   SPECIFIC_HEAT_CAPACITY_OF_AIR_EQ_ABOVE_ZERO,
   SPECIFIC_HEAT_CAPACITY_OF_WATER,
 } from './constants';
+import { validateSpecificHumidity, validateTemperature } from './validation';
 
 /**
  * Calculates enthalpy [J/kg] from temperature [°C] and specific humidity [g/kg].
  * @param temperature Temperature [°C].
  * @param specificHumidity Specific humidity [g/kg].
  * @returns Enthalpy [kJ/kg].
+ * @throws TypeError if any parameter is not a finite number.
+ * @throws RangeError if any parameter is outside valid range.
  */
 export function enthalpy(temperature: number, specificHumidity: number): number {
+  validateTemperature(temperature);
+  validateSpecificHumidity(specificHumidity);
   const specificHumidityNormalized = specificHumidity / 1000;
   if (temperature >= 0) {
     return (

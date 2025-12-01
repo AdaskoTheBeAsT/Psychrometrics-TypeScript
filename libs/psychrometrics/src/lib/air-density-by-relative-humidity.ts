@@ -17,6 +17,7 @@
 
 import { GAS_CONSTANT_FOR_DRY_AIR, GAS_CONSTANT_FOR_WATER_VAPOR } from './constants';
 import { temperatureToSaturationVaporPressure } from './temperature-to-saturation-vapor-pressure';
+import { validateAirPressure, validateRelativeHumidity, validateTemperature } from './validation';
 
 /**
  * Calculates air density by relative humidity [kg/m³].
@@ -24,12 +25,17 @@ import { temperatureToSaturationVaporPressure } from './temperature-to-saturatio
  * @param temperature Temperature [°C].
  * @param relativeHumidity Relative humidity [%].
  * @returns Air density [kg/m³].
+ * @throws TypeError if any parameter is not a finite number.
+ * @throws RangeError if any parameter is outside valid range.
  */
 export function airDensityByRelativeHumidity(
   airPressure: number,
   temperature: number,
-  relativeHumidity: number
+  relativeHumidity: number,
 ): number {
+  validateAirPressure(airPressure);
+  validateTemperature(temperature);
+  validateRelativeHumidity(relativeHumidity);
   const svp = temperatureToSaturationVaporPressure(temperature);
   const pv = (svp * relativeHumidity) / 100;
   const pd = airPressure - pv;

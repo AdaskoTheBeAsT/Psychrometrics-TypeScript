@@ -20,51 +20,145 @@ import { enthalpy } from './enthalpy';
 import { enthalpyToSpecificHumidity } from './enthalpy-to-specific-humidity';
 import { enthalpyToTemperature } from './enthalpy-to-temperature';
 import { temperatureToMaximumSpecificHumidity } from './temperature-to-maximum-specific-humidity';
+import { validateAirPressure, validateSpecificHumidity, validateTemperature } from './validation';
+
+/** Default maximum number of iterations for wet bulb temperature calculation */
+const DEFAULT_MAX_ITERATIONS = 1000;
+
+/** Default convergence epsilon for wet bulb temperature calculation */
+const DEFAULT_EPSILON = 0.00001;
+
+/**
+ * Error thrown when wet bulb temperature calculation fails to converge.
+ */
+export class WetBulbConvergenceError extends Error {
+  constructor(
+    public readonly iterations: number,
+    public readonly lastValue: number,
+    public readonly lastDifference: number,
+  ) {
+    super(
+      `Wet bulb temperature calculation failed to converge after ${iterations} iterations. ` +
+        `Last value: ${lastValue}, last difference: ${lastDifference}`,
+    );
+    this.name = 'WetBulbConvergenceError';
+  }
+}
+
+/**
+ * Validates wet bulb calculation parameters.
+ */
+function validateWetBulbParams(
+  airPressure: number,
+  temperature: number,
+  specificHumidity: number,
+  epsilon: number,
+  maxIterations: number,
+): void {
+  validateAirPressure(airPressure);
+  validateTemperature(temperature);
+  validateSpecificHumidity(specificHumidity);
+
+  if (epsilon <= 0) {
+    throw new RangeError(`Epsilon must be positive. Received: ${epsilon}`);
+  }
+  if (maxIterations < 1) {
+    throw new RangeError(`maxIterations must be at least 1. Received: ${maxIterations}`);
+  }
+}
+
+/**
+ * Calculates wet bulb temperature for temperatures >= 0°C using dew point iteration.
+ */
+function calculateWetBulbAboveZero(
+  airPressure: number,
+  temperature: number,
+  specificHumidity: number,
+  epsilon: number,
+  maxIterations: number,
+): number {
+  let temperaturePrev = temperature;
+  let specificHumidityPrev = specificHumidity;
+  let iterations = 0;
+  let temperatureDifference: number;
+
+  do {
+    iterations++;
+    const dp = dewPointTemperature(airPressure, specificHumidityPrev);
+    temperatureDifference = (temperaturePrev - dp) / 2;
+    temperaturePrev += temperaturePrev >= dp ? -Math.abs(temperatureDifference) : Math.abs(temperatureDifference);
+
+    const ent = enthalpy(temperature, specificHumidity);
+    specificHumidityPrev = enthalpyToSpecificHumidity(ent, temperaturePrev);
+
+    if (iterations >= maxIterations) {
+      throw new WetBulbConvergenceError(iterations, temperaturePrev, temperatureDifference);
+    }
+  } while (Math.abs(temperatureDifference) > epsilon);
+
+  return temperaturePrev;
+}
+
+/**
+ * Calculates wet bulb temperature for temperatures < 0°C using specific humidity iteration.
+ */
+function calculateWetBulbBelowZero(
+  airPressure: number,
+  temperature: number,
+  specificHumidity: number,
+  epsilon: number,
+  maxIterations: number,
+): number {
+  let temperaturePrev = temperature;
+  let specificHumidityPrev = specificHumidity;
+  let iterations = 0;
+  let specificHumidityDifference: number;
+
+  do {
+    iterations++;
+    const maxSpecificHumidity = temperatureToMaximumSpecificHumidity(airPressure, temperaturePrev);
+    specificHumidityDifference = (maxSpecificHumidity - specificHumidityPrev) / 2;
+    const adjustment =
+      specificHumidityPrev >= maxSpecificHumidity
+        ? -Math.abs(specificHumidityDifference)
+        : Math.abs(specificHumidityDifference);
+    specificHumidityPrev += adjustment;
+
+    const ent = enthalpy(temperature, specificHumidity);
+    temperaturePrev = enthalpyToTemperature(ent, specificHumidityPrev);
+
+    if (iterations >= maxIterations) {
+      throw new WetBulbConvergenceError(iterations, temperaturePrev, specificHumidityDifference / specificHumidityPrev);
+    }
+  } while (Math.abs(specificHumidityDifference / specificHumidityPrev) > epsilon);
+
+  return temperaturePrev;
+}
 
 /**
  * Calculate wet bulb temperature from air pressure, temperature and specific humidity.
  * @param airPressure Air pressure in [Pa].
  * @param temperature Temperature in [°C].
  * @param specificHumidity Specific humidity in [g/kg].
+ * @param epsilon Convergence threshold (default: 0.00001).
+ * @param maxIterations Maximum number of iterations (default: 1000).
  * @returns Wet bulb temperature in [°C].
+ * @throws TypeError if any parameter is not a finite number.
+ * @throws RangeError if any parameter is outside valid range.
+ * @throws WetBulbConvergenceError if calculation fails to converge.
  */
 export function wetBulbTemperature(
   airPressure: number,
   temperature: number,
   specificHumidity: number,
-  epsilon = 0.00001
+  epsilon = DEFAULT_EPSILON,
+  maxIterations = DEFAULT_MAX_ITERATIONS,
 ): number {
-  let temperaturePrev = temperature;
-  let specificHumidityPrev = specificHumidity;
+  validateWetBulbParams(airPressure, temperature, specificHumidity, epsilon, maxIterations);
+
   if (temperature >= 0) {
-    let temperatureDifference: number;
-    do {
-      const dp = dewPointTemperature(airPressure, specificHumidityPrev);
-      temperatureDifference = (temperaturePrev - dp) / 2.0;
-      if (temperaturePrev >= dp) {
-        temperaturePrev -= Math.abs(temperatureDifference);
-      } else {
-        temperaturePrev += Math.abs(temperatureDifference);
-      }
-
-      const ent = enthalpy(temperature, specificHumidity);
-      specificHumidityPrev = enthalpyToSpecificHumidity(ent, temperaturePrev);
-    } while (Math.abs(temperatureDifference) > epsilon);
-  } else {
-    let specificHumidityDifference;
-    do {
-      const maxSpecificHumidity = temperatureToMaximumSpecificHumidity(airPressure, temperaturePrev);
-      specificHumidityDifference = (maxSpecificHumidity - specificHumidityPrev) / 2.0;
-      if (specificHumidityPrev >= maxSpecificHumidity) {
-        specificHumidityPrev -= Math.abs(specificHumidityDifference);
-      } else {
-        specificHumidityPrev += Math.abs(specificHumidityDifference);
-      }
-
-      const ent = enthalpy(temperature, specificHumidity);
-      temperaturePrev = enthalpyToTemperature(ent, specificHumidityPrev);
-    } while (Math.abs(specificHumidityDifference / specificHumidityPrev) > epsilon);
+    return calculateWetBulbAboveZero(airPressure, temperature, specificHumidity, epsilon, maxIterations);
   }
 
-  return temperaturePrev;
+  return calculateWetBulbBelowZero(airPressure, temperature, specificHumidity, epsilon, maxIterations);
 }

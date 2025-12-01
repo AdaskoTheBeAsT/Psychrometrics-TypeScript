@@ -4,14 +4,19 @@ import {
   SPECIFIC_HEAT_CAPACITY_OF_AIR_EQ_ABOVE_ZERO,
   SPECIFIC_HEAT_CAPACITY_OF_WATER,
 } from './constants';
+import { validateEnthalpy, validateSpecificHumidity } from './validation';
 
 /**
  * Calculates temperature [°C] from enthalpy [kJ/kg] and specific humidity [g/kg].
  * @param e Enthalpy [kJ/kg].
  * @param specificHumidity Specific humidity [g/kg].
  * @returns Temperature [°C]
+ * @throws TypeError if any parameter is not a finite number.
+ * @throws RangeError if specific humidity is negative.
  */
 export function enthalpyToTemperature(e: number, specificHumidity: number): number {
+  validateEnthalpy(e);
+  validateSpecificHumidity(specificHumidity);
   const specificHumidityNormalized = specificHumidity / 1000;
   const t1 =
     (e + 0.026 - EVAPORATION_HEAT * specificHumidityNormalized) /

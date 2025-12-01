@@ -1,4 +1,3 @@
-/* eslint-disable */
 const reportPath = './.reports/libs/psychrometrics/';
 
 export default {

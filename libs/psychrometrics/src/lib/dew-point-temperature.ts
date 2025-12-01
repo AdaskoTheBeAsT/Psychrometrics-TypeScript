@@ -17,15 +17,21 @@
 
 import { MOLAR_MASS_RATIO } from './constants';
 import { saturationVaporPressureToTemperature } from './saturation-vapor-pressure-to-temperature';
+import { validateAirPressure, validateSpecificHumidity } from './validation';
 
 /**
  * Calculates dew point temperature from specific humidity [°C].
  * @param airPressure Air pressure [Pa].
  * @param specificHumidity Specific humidity [g/kg].
  * @returns Dew point temperature [°C].
+ * @throws TypeError if any parameter is not a finite number.
+ * @throws RangeError if any parameter is outside valid range.
  */
 export function dewPointTemperature(airPressure: number, specificHumidity: number): number {
-  const specificHumidityNormalized = specificHumidity / 1000.0;
+  validateAirPressure(airPressure);
+  validateSpecificHumidity(specificHumidity);
+
+  const specificHumidityNormalized = specificHumidity / 1000;
   const saturatedPress = (specificHumidityNormalized * airPressure) / (specificHumidityNormalized + MOLAR_MASS_RATIO);
   return saturationVaporPressureToTemperature(saturatedPress);
 }

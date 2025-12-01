@@ -14,5 +14,6 @@ export * from './lib/specific-and-relative-humidity-to-temperature';
 export * from './lib/specific-to-relative-humidity';
 export * from './lib/temperature-to-maximum-specific-humidity';
 export * from './lib/temperature-to-saturation-vapor-pressure';
+export * from './lib/validation';
 export * from './lib/wet-bulb-temperature-to-specific-humidity';
 export * from './lib/wet-bulb-temperature';

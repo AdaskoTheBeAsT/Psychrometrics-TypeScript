@@ -17,6 +17,12 @@
 
 import { MOLAR_MASS_RATIO } from './constants';
 import { temperatureToSaturationVaporPressure } from './temperature-to-saturation-vapor-pressure';
+import {
+  validateAirPressure,
+  validatePressureRatio,
+  validateRelativeHumidity,
+  validateTemperature,
+} from './validation';
 
 /**
  * Converts relative to specific humidity
@@ -24,13 +30,24 @@ import { temperatureToSaturationVaporPressure } from './temperature-to-saturatio
  * @param temperature Temperature [°C]
  * @param relativeHumidity Relative humidity [%]
  * @returns Specific humidity [g/kg]
+ * @throws TypeError if any parameter is not a finite number.
+ * @throws RangeError if any parameter is outside valid range.
+ * @throws Error if saturation vapor pressure exceeds air pressure.
  */
 export function relativeToSpecificHumidity(airPressure: number, temperature: number, relativeHumidity: number): number {
-  const relativeHumidityNormalized = relativeHumidity / 100.0;
+  validateAirPressure(airPressure);
+  validateTemperature(temperature);
+  validateRelativeHumidity(relativeHumidity);
+
+  const relativeHumidityNormalized = relativeHumidity / 100;
   const saturationVaporPressure = temperatureToSaturationVaporPressure(temperature);
+
+  // Guard against division by zero
+  validatePressureRatio(saturationVaporPressure, airPressure);
+
   const saturatedHumidityRatio = (MOLAR_MASS_RATIO * saturationVaporPressure) / (airPressure - saturationVaporPressure);
   return (
-    (1000.0 * relativeHumidityNormalized * saturatedHumidityRatio) /
-    (1.0 + ((1.0 - relativeHumidityNormalized) * saturatedHumidityRatio) / MOLAR_MASS_RATIO)
+    (1000 * relativeHumidityNormalized * saturatedHumidityRatio) /
+    (1 + ((1 - relativeHumidityNormalized) * saturatedHumidityRatio) / MOLAR_MASS_RATIO)
   );
 }

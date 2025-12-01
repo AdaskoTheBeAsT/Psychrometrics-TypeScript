@@ -16,6 +16,7 @@
  */
 
 import { GAS_CONSTANT_FOR_DRY_AIR, MOLAR_MASS_OF_DRY_AIR, MOLAR_MASS_OF_WATER_VAPOR } from './constants';
+import { validateAirPressure, validateSpecificHumidity, validateTemperature } from './validation';
 
 /**
  * Calculates air density by specific humidity [kg/m³].
@@ -23,12 +24,17 @@ import { GAS_CONSTANT_FOR_DRY_AIR, MOLAR_MASS_OF_DRY_AIR, MOLAR_MASS_OF_WATER_VA
  * @param temperature Temperature [°C].
  * @param specificHumidity Specific humidity [g/kg].
  * @returns Air density [kg/m³].
+ * @throws TypeError if any parameter is not a finite number.
+ * @throws RangeError if any parameter is outside valid range.
  */
 export function airDensityBySpecificHumidity(
   airPressure: number,
   temperature: number,
-  specificHumidity: number
+  specificHumidity: number,
 ): number {
+  validateAirPressure(airPressure);
+  validateTemperature(temperature);
+  validateSpecificHumidity(specificHumidity);
   const specificHumidityNormalized = specificHumidity / 1000;
   const temperatureKelvin = temperature + 273.15;
   return (
