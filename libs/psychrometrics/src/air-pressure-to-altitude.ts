@@ -6,4 +6,4 @@ export {
   TEMPERATURE_LAPSE_RATE,
   UNIVERSAL_GAS_CONSTANT,
 } from './lib/constants';
-export { airPressureToAltitude } from './lib/air-pressure-to-altitude';
+export * from './lib/air-pressure-to-altitude';

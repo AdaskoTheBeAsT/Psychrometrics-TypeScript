@@ -15,9 +15,26 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { Initializer } from './initializer';
+import { MoistAirEnthalpyFormula } from './moist-air-enthalpy-formula';
+import { PsychrometricStandard } from './psychrometric-standard';
+import { SaturationVaporPressureFormula } from './saturation-vapor-pressure-formula';
 import { temperatureToMaximumSpecificHumidity } from './temperature-to-maximum-specific-humidity';
 
 describe('temperatureToMaximumSpecificHumidity', () => {
+  beforeAll(() => {
+    Initializer.initialize(
+      2,
+      PsychrometricStandard.Eurovent,
+      MoistAirEnthalpyFormula.GluckLegacy,
+      SaturationVaporPressureFormula.Huang2018,
+    );
+  });
+
+  afterAll(() => {
+    Initializer.initialize();
+  });
+
   const testCases = [
     [101325, 20, 14.699054061706954],
     [101325, 0, 3.7751266016292133],

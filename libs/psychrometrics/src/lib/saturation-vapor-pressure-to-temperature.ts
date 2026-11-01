@@ -15,13 +15,64 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Initializer } from './initializer';
+import { Spline } from '@adaskothebeast/splines';
+import { temperatureToSaturationVaporPressure } from './temperature-to-saturation-vapor-pressure';
 
-/** Minimum valid pressure for saturation vapor pressure to temperature conversion */
-const MIN_PRESSURE = 0.0014049735954231866;
+/**
+ * Error thrown when attempting to use saturation vapor pressure interpolation
+ * before initialization.
+ */
+export class InitializationRequiredError extends Error {
+  constructor() {
+    super(
+      'Initializer.initialize() must be called before using saturationVaporPressureToTemperature. ' +
+        'Call Initializer.initialize() at application startup or use Initializer.ensureInitialized() ' +
+        'for lazy initialization.',
+    );
+    this.name = 'InitializationRequiredError';
+  }
+}
 
-/** Maximum valid pressure for saturation vapor pressure to temperature conversion */
-const MAX_PRESSURE = 101416.99487195771;
+let activeSpline: Spline | null = null;
+
+/**
+ * Gets the active saturation vapor pressure to temperature spline.
+ * @throws InitializationRequiredError if initialize() has not been called.
+ * @internal
+ */
+export function getSaturationVaporPressureToTemperatureSpline(): Spline {
+  if (activeSpline == null) {
+    throw new InitializationRequiredError();
+  }
+  return activeSpline;
+}
+
+/**
+ * Sets the active saturation vapor pressure to temperature spline.
+ * @internal
+ */
+export function setSaturationVaporPressureToTemperatureSpline(spline: Spline | null): void {
+  activeSpline = spline;
+}
+
+/** Minimum valid pressure for saturation vapor pressure to temperature conversion (at -100°C) */
+export let minValidSaturationPressure = temperatureToSaturationVaporPressure(-100);
+
+/** Maximum valid pressure for saturation vapor pressure to temperature conversion (at 100°C) */
+export let maxValidSaturationPressure = temperatureToSaturationVaporPressure(100);
+
+/** Saturation vapor pressure threshold at 100°C for clamping floating-point round-off */
+export let boilingPointSaturationPressure = maxValidSaturationPressure - 1e-5;
+
+/**
+ * Updates the valid saturation vapor pressure bounds for the active formula.
+ * @internal
+ */
+export function updateSaturationVaporPressureBounds(minPressure: number, maxPressure: number): void {
+  minValidSaturationPressure = minPressure;
+  maxValidSaturationPressure = maxPressure;
+  boilingPointSaturationPressure = maxPressure - 1e-5;
+}
 
 /**
  * Calculates temperature by saturation vapor pressure.
@@ -38,22 +89,23 @@ export function saturationVaporPressureToTemperature(pressure: number): number {
     throw new TypeError('Pressure must be a finite number.');
   }
 
-  if (pressure < MIN_PRESSURE) {
+  if (pressure < minValidSaturationPressure) {
     throw new RangeError(
-      `Pressure too low (${pressure} Pa). Must be at least ${MIN_PRESSURE} Pa (corresponds to -100°C).`,
+      `Pressure too low (${pressure} Pa). Must be at least ${minValidSaturationPressure} Pa (corresponds to -100°C).`,
     );
   }
 
-  if (pressure > MAX_PRESSURE) {
+  if (pressure > maxValidSaturationPressure) {
     throw new RangeError(
-      `Pressure too high (${pressure} Pa). Must be at most ${MAX_PRESSURE} Pa (corresponds to 100°C).`,
+      `Pressure too high (${pressure} Pa). Must be at most ${maxValidSaturationPressure} Pa (corresponds to 100°C).`,
     );
   }
 
-  // Handle edge case at exactly 100°C
-  if (pressure >= 101416.99487) {
+  const spline = getSaturationVaporPressureToTemperatureSpline();
+
+  if (pressure >= boilingPointSaturationPressure) {
     return 100;
   }
 
-  return Number(Initializer.saturationVaporPressureToTemperatureSpline.interpolate(pressure).toFixed(12));
+  return Number(spline.interpolate(pressure).toFixed(12));
 }

@@ -16,8 +16,25 @@
  */
 
 import { airDensityByRelativeHumidity } from './air-density-by-relative-humidity';
+import { Initializer } from './initializer';
+import { MoistAirEnthalpyFormula } from './moist-air-enthalpy-formula';
+import { PsychrometricStandard } from './psychrometric-standard';
+import { SaturationVaporPressureFormula } from './saturation-vapor-pressure-formula';
 
 describe('airDensityByRelativeHumidity', () => {
+  beforeAll(() => {
+    Initializer.initialize(
+      2,
+      PsychrometricStandard.Eurovent,
+      MoistAirEnthalpyFormula.GluckLegacy,
+      SaturationVaporPressureFormula.Huang2018,
+    );
+  });
+
+  afterAll(() => {
+    Initializer.initialize();
+  });
+
   const testCases = [
     [101325, 20, 60, 1.1977919138004267],
     [101325, 0, 100, 1.2893138971367555],
@@ -30,6 +47,6 @@ describe('airDensityByRelativeHumidity', () => {
       const density = airDensityByRelativeHumidity(airPressure, temperature, relativeHumidity);
 
       expect(density).toBe(expected);
-    }
+    },
   );
 });

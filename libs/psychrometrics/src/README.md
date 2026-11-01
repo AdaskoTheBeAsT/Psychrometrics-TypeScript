@@ -1,6 +1,6 @@
 # @adaskothebeast/psychrometrics
 
-> A comprehensive, type-safe TypeScript library for psychrometric calculations
+> A comprehensive, type-safe TypeScript library for psychrometric calculations across European (Eurovent / VDI / Recknagel) and North American (ASHRAE) HVAC standards.
 
 ## Installation
 
@@ -39,37 +39,58 @@ For full documentation, see the [main README](../../../README.md).
 | Function | Description |
 |----------|-------------|
 | `temperatureToSaturationVaporPressure(temp)` | °C → Pa |
+| `temperatureToSaturationVaporPressureOfWater(temp)` | °C → Pa |
+| `temperatureToSaturationVaporPressureOfIce(temp)` | °C → Pa |
 | `saturationVaporPressureToTemperature(pressure)` | Pa → °C |
 | `altitudeToAirPressure(altitude)` | m → Pa |
 | `airPressureToAltitude(pressure)` | Pa → m |
 
-#### Humidity
+#### Humidity & Wet Bulb
 
 | Function | Description |
 |----------|-------------|
-| `relativeToSpecificHumidity(P, T, RH)` | %, °C → g/kg |
-| `specificToRelativeHumidity(P, T, SH)` | g/kg, °C → % |
-| `dewPointTemperature(P, SH)` | g/kg → °C |
-| `wetBulbTemperature(P, T, SH)` | °C, g/kg → °C |
+| `relativeToSpecificHumidity(P, T, RH)` | Pa, °C, % → g/kg |
+| `specificToRelativeHumidity(P, T, SH)` | Pa, °C, g/kg → % |
+| `temperatureToMaximumSpecificHumidity(P, T)` | Pa, °C → g/kg |
+| `dewPointTemperature(P, SH)` | Pa, g/kg → °C |
+| `wetBulbTemperature(P, T, SH, epsilon?, maxIterations?)` | Pa, °C, g/kg → °C |
+| `wetBulbTemperatureToSpecificHumidity(P, T, WB)` | Pa, °C, °C → g/kg |
+| `adiabaticSaturationSpecificHumidity(P, T, SH)` | Pa, °C, g/kg → g/kg |
+| `specificAndRelativeHumidityToTemperature(P, SH, RH)` | Pa, g/kg, % → °C |
 
-#### Air Properties
+#### Air Density & Enthalpy
 
 | Function | Description |
 |----------|-------------|
 | `airDensityByRelativeHumidity(P, T, RH)` | Pa, °C, % → kg/m³ |
 | `airDensityBySpecificHumidity(P, T, SH)` | Pa, °C, g/kg → kg/m³ |
 | `enthalpy(T, SH)` | °C, g/kg → kJ/kg |
+| `enthalpyToTemperature(H, SH)` | kJ/kg, g/kg → °C |
+| `enthalpyToSpecificHumidity(H, T)` | kJ/kg, °C → g/kg |
+| `condensedWaterOrIceEnthalpy(T)` | °C → kJ/kg |
 
-### Initialization
-
-Required for reverse calculations (vapor pressure → temperature):
+### Initialization & Standards
 
 ```typescript
-// Default (2 decimal places, 20k values)
+import {
+  Initializer,
+  MoistAirEnthalpyFormula,
+  PsychrometricStandard,
+  SaturationVaporPressureFormula,
+  WetBulbFormula,
+} from '@adaskothebeast/psychrometrics';
+
+// Default (Eurovent, Recknagel, Magnus-Tetens, Isenthalpic, 2 decimal places)
 Initializer.initialize();
 
-// High precision (4 decimal places, 2M values)
-Initializer.initialize(4);
+// ASHRAE standard configuration
+Initializer.initialize(
+  2,
+  PsychrometricStandard.Ashrae,
+  MoistAirEnthalpyFormula.Ashrae,
+  SaturationVaporPressureFormula.AshraeHylandWexler,
+  WetBulbFormula.DefaultForStandard,
+);
 
 // Lazy initialization
 Initializer.ensureInitialized();
@@ -77,11 +98,11 @@ Initializer.ensureInitialized();
 
 | Accuracy | Values | Memory |
 |:--------:|:------:|:------:|
-| 0 | 200 | ~2 KB |
-| 1 | 2,000 | ~20 KB |
-| **2** | 20,000 | ~200 KB |
-| 3 | 200,000 | ~2 MB |
-| 4 | 2,000,000 | ~20 MB |
+| 0 | 201 | ~3 KB |
+| 1 | 2,001 | ~32 KB |
+| **2** | 20,001 | ~320 KB |
+| 3 | 200,001 | ~3.2 MB |
+| 4 | 2,000,001 | ~32 MB |
 
 ## Detailed Formula Documentation
 

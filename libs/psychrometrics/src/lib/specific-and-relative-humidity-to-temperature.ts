@@ -20,13 +20,15 @@ import { saturationVaporPressureToTemperature } from './saturation-vapor-pressur
 import { validateAirPressure, validateRelativeHumidity, validateSpecificHumidity } from './validation';
 
 /**
- * Converts air pressure, specific and relative humidity to temperature
- * @param airPressure Air pressure [Pa]
- * @param specificHumidity Specific humidity [g/kg]
- * @param relativeHumidity Relative humidity [%]
- * @returns Temperature [°C]
+ * Calculates temperature [°C] from air pressure [Pa], specific humidity [g/kg] and relative humidity [%].
+ * Requires `Initializer.initialize()` to be called before use.
+ * @param airPressure Air pressure [Pa].
+ * @param specificHumidity Specific humidity [g/kg].
+ * @param relativeHumidity Relative humidity [%].
+ * @returns Temperature [°C].
  * @throws TypeError if any parameter is not a finite number.
- * @throws RangeError if any parameter is outside valid range.
+ * @throws RangeError if any parameter is outside valid range or relativeHumidity is 0.
+ * @throws InitializationRequiredError if `Initializer.initialize()` has not been called.
  */
 export function specificAndRelativeHumidityToTemperature(
   airPressure: number,
@@ -37,11 +39,16 @@ export function specificAndRelativeHumidityToTemperature(
   validateSpecificHumidity(specificHumidity);
   validateRelativeHumidity(relativeHumidity);
 
+  if (relativeHumidity === 0) {
+    throw new RangeError('Relative humidity must be greater than 0% to calculate temperature.');
+  }
+
   const relativeHumidityNormalized = relativeHumidity / 100;
   const specificHumidityNormalized = specificHumidity / 1000;
-  const ratio =
-    specificHumidityNormalized /
-    (relativeHumidityNormalized + ((relativeHumidityNormalized - 1) * specificHumidityNormalized) / MOLAR_MASS_RATIO);
-  const saturationVaporPressure = (ratio * airPressure) / (MOLAR_MASS_RATIO + ratio);
-  return saturationVaporPressureToTemperature(saturationVaporPressure);
+  const maxSpecificHumidity =
+    (specificHumidityNormalized * MOLAR_MASS_RATIO) /
+    (relativeHumidityNormalized * MOLAR_MASS_RATIO + specificHumidityNormalized * (relativeHumidityNormalized - 1));
+  const saturationPressure = (airPressure * maxSpecificHumidity) / (MOLAR_MASS_RATIO + maxSpecificHumidity);
+
+  return saturationVaporPressureToTemperature(saturationPressure);
 }

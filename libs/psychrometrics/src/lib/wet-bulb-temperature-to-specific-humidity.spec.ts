@@ -16,11 +16,26 @@
  */
 
 import { Initializer } from './initializer';
-import { wetBulbTemperatureToSpecificHumidity } from './wet-bulb-temperature-to-specific-humidity';
+import { MoistAirEnthalpyFormula } from './moist-air-enthalpy-formula';
+import { PsychrometricStandard } from './psychrometric-standard';
+import { SaturationVaporPressureFormula } from './saturation-vapor-pressure-formula';
+import {
+  wetBulbTemperatureToSpecificHumidity,
+  wetBulbTemperatureToSpecificHumidityIsenthalpic,
+} from './wet-bulb-temperature-to-specific-humidity';
 
 describe('wetBulbTemperatureToSpecificHumidity', () => {
   beforeAll(() => {
-    Initializer.initialize(2);
+    Initializer.initialize(
+      2,
+      PsychrometricStandard.Eurovent,
+      MoistAirEnthalpyFormula.GluckLegacy,
+      SaturationVaporPressureFormula.Huang2018,
+    );
+  });
+
+  afterAll(() => {
+    Initializer.initialize();
   });
 
   const testCases = [
@@ -35,6 +50,9 @@ describe('wetBulbTemperatureToSpecificHumidity', () => {
       const wbt = wetBulbTemperatureToSpecificHumidity(airPressure, temperature, wetBulbTemperature);
 
       expect(wbt).toBe(expected);
-    }
+      expect(wetBulbTemperatureToSpecificHumidityIsenthalpic(airPressure, temperature, wetBulbTemperature)).toBe(
+        expected,
+      );
+    },
   );
 });

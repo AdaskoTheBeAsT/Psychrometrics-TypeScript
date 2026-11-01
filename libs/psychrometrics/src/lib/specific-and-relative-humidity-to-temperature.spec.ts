@@ -16,11 +16,23 @@
  */
 
 import { Initializer } from './initializer';
+import { MoistAirEnthalpyFormula } from './moist-air-enthalpy-formula';
+import { PsychrometricStandard } from './psychrometric-standard';
+import { SaturationVaporPressureFormula } from './saturation-vapor-pressure-formula';
 import { specificAndRelativeHumidityToTemperature } from './specific-and-relative-humidity-to-temperature';
 
 describe('specificAndRelativeHumidityToTemperature', () => {
   beforeAll(() => {
-    Initializer.initialize(2);
+    Initializer.initialize(
+      2,
+      PsychrometricStandard.Eurovent,
+      MoistAirEnthalpyFormula.GluckLegacy,
+      SaturationVaporPressureFormula.Huang2018,
+    );
+  });
+
+  afterAll(() => {
+    Initializer.initialize();
   });
 
   const testCases = [
@@ -34,6 +46,10 @@ describe('specificAndRelativeHumidityToTemperature', () => {
       const temperature = specificAndRelativeHumidityToTemperature(airPressure, specificHumidity, relativeHumidity);
 
       expect(temperature).toBe(expected);
-    }
+    },
   );
+
+  it('should throw RangeError when relativeHumidity is 0', () => {
+    expect(() => specificAndRelativeHumidityToTemperature(101325, 5, 0)).toThrow(RangeError);
+  });
 });

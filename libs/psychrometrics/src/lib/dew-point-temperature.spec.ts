@@ -17,10 +17,22 @@
 
 import { dewPointTemperature } from './dew-point-temperature';
 import { Initializer } from './initializer';
+import { MoistAirEnthalpyFormula } from './moist-air-enthalpy-formula';
+import { PsychrometricStandard } from './psychrometric-standard';
+import { SaturationVaporPressureFormula } from './saturation-vapor-pressure-formula';
 
 describe('dewPointTemperature', () => {
   beforeAll(() => {
-    Initializer.initialize(2);
+    Initializer.initialize(
+      2,
+      PsychrometricStandard.Eurovent,
+      MoistAirEnthalpyFormula.GluckLegacy,
+      SaturationVaporPressureFormula.Huang2018,
+    );
+  });
+
+  afterAll(() => {
+    Initializer.initialize();
   });
 
   const testCases = [
@@ -34,6 +46,6 @@ describe('dewPointTemperature', () => {
       const temperature = dewPointTemperature(airPressure, specificHumidity);
 
       expect(temperature).toBe(expected);
-    }
+    },
   );
 });

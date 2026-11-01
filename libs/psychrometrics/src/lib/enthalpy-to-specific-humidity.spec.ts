@@ -15,9 +15,26 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { enthalpyToSpecificHumidity } from './enthalpy-to-specific-humidity';
+import { enthalpyToSpecificHumidity, enthalpyToSpecificHumidityGluckLegacy } from './enthalpy-to-specific-humidity';
+import { Initializer } from './initializer';
+import { MoistAirEnthalpyFormula } from './moist-air-enthalpy-formula';
+import { PsychrometricStandard } from './psychrometric-standard';
+import { SaturationVaporPressureFormula } from './saturation-vapor-pressure-formula';
 
 describe('enthalpyToSpecificHumidity', () => {
+  beforeAll(() => {
+    Initializer.initialize(
+      2,
+      PsychrometricStandard.Eurovent,
+      MoistAirEnthalpyFormula.GluckLegacy,
+      SaturationVaporPressureFormula.Huang2018,
+    );
+  });
+
+  afterAll(() => {
+    Initializer.initialize();
+  });
+
   const testCases = [
     [-0.026, 0, 0],
     [0.2241, 0, 0.09999999999999999],
@@ -32,5 +49,6 @@ describe('enthalpyToSpecificHumidity', () => {
     const specificHumidity = enthalpyToSpecificHumidity(e, temperature);
 
     expect(specificHumidity).toBe(expected);
+    expect(enthalpyToSpecificHumidityGluckLegacy(e, temperature)).toBe(expected);
   });
 });

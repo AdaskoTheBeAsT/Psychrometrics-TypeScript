@@ -1,6 +1,6 @@
 {
   "name": "@adaskothebeast/psychrometrics",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "license": "AGPL-3.0-or-later",
   "description": "Psychrometrics interpolation for TypeScript",
   "author": "Adam Pluciński <adaskothebeast@gmail.com>",
@@ -13,13 +13,17 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AdaskoTheBeAsT/Psychrometrics-TypeScript/Psychrometrics-TypeScript.git"
+    "url": "git+https://github.com/AdaskoTheBeAsT/Psychrometrics-TypeScript.git",
+    "directory": "libs/psychrometrics"
   },
   "bugs": {
     "url": "https://github.com/AdaskoTheBeAsT/Psychrometrics-TypeScript/issues"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false,
   "dependencies": {
-    "@adaskothebeast/splines": "^4.0.0"
+    "@adaskothebeast/splines": "^6.0.0"
   }
 }

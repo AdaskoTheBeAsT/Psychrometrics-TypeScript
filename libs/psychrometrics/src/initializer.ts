@@ -1,1 +1,1 @@
-export { Initializer } from './lib/initializer';
+export { InitializationRequiredError, Initializer } from './lib/initializer';

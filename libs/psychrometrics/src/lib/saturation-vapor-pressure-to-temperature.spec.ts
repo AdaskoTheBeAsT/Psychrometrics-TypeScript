@@ -16,18 +16,29 @@
  */
 
 import { Initializer } from './initializer';
-import { saturationVaporPressureToTemperature } from './saturation-vapor-pressure-to-temperature';
+import { MoistAirEnthalpyFormula } from './moist-air-enthalpy-formula';
+import { PsychrometricStandard } from './psychrometric-standard';
+import { SaturationVaporPressureFormula } from './saturation-vapor-pressure-formula';
+import {
+  maxValidSaturationPressure,
+  minValidSaturationPressure,
+  saturationVaporPressureToTemperature,
+} from './saturation-vapor-pressure-to-temperature';
 import { temperatureToSaturationVaporPressure } from './temperature-to-saturation-vapor-pressure';
 
 describe('saturationVaporPressureToTemperature', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     Initializer.initialize(2);
+  });
+
+  afterAll(() => {
+    Initializer.initialize();
   });
 
   it('should throw when temperature too high', () => {
     expect.hasAssertions();
 
-    expect(() => saturationVaporPressureToTemperature(102000)).toThrow();
+    expect(() => saturationVaporPressureToTemperature(102500)).toThrow();
   });
 
   it('should throw when temperature too low', () => {
@@ -36,21 +47,26 @@ describe('saturationVaporPressureToTemperature', () => {
     expect(() => saturationVaporPressureToTemperature(0.0001)).toThrow();
   });
 
-  it('should calculate when passing 0.0014049735954231866', () => {
+  it('should calculate boundary pressures for default MagnusTetens', () => {
     expect.hasAssertions();
+
+    expect(saturationVaporPressureToTemperature(minValidSaturationPressure)).toBe(-100);
+    expect(saturationVaporPressureToTemperature(610.5)).toBe(0);
+    expect(saturationVaporPressureToTemperature(maxValidSaturationPressure)).toBe(100);
+  });
+
+  it('should calculate Huang2018 reference pressures when configured', () => {
+    expect.hasAssertions();
+
+    Initializer.initialize(
+      2,
+      PsychrometricStandard.Eurovent,
+      MoistAirEnthalpyFormula.GluckLegacy,
+      SaturationVaporPressureFormula.Huang2018,
+    );
 
     expect(saturationVaporPressureToTemperature(0.0014049735954231866)).toBe(-100);
-  });
-
-  it('should calculate when passing 611.2911778902558', () => {
-    expect.hasAssertions();
-
     expect(saturationVaporPressureToTemperature(611.2911778902558)).toBe(0);
-  });
-
-  it('should calculate when passing 101416.99487195771', () => {
-    expect.hasAssertions();
-
     expect(saturationVaporPressureToTemperature(101416.99487195771)).toBe(100);
   });
 

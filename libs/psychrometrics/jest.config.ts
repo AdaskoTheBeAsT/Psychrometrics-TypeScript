@@ -1,6 +1,6 @@
-const reportPath = './.reports/libs/psychrometrics/';
+const reportPath = '../../.reports/libs/psychrometrics/';
 
-export default {
+module.exports = {
   displayName: 'psychrometrics',
   preset: '../../jest.preset.js',
   globals: {},
@@ -16,7 +16,7 @@ export default {
   transformIgnorePatterns: ['/node_modules/(?!(@adaskothebeast/splines))'],
   moduleFileExtensions: ['ts', 'js', 'html'],
   collectCoverage: true,
-  coverageDirectory: `../../${reportPath}coverage`,
+  coverageDirectory: `${reportPath}coverage`,
   coverageReporters: ['cobertura', 'html', 'lcov'],
   reporters: [
     'default',

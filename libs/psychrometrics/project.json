@@ -5,58 +5,31 @@
   "projectType": "library",
   "tags": [],
   "targets": {
-    "build": {
-      "executor": "@nx/rollup:rollup",
-      "options": {
-        "outputPath": "dist/libs/psychrometrics",
-        "main": "libs/psychrometrics/src/index.ts",
-        "additionalEntryPoints": [
-          "libs/psychrometrics/src/air-density-by-relative-humidity.ts",
-          "libs/psychrometrics/src/air-density-by-specific-humidity.ts",
-          "libs/psychrometrics/src/air-pressure-to-altitude.ts",
-          "libs/psychrometrics/src/altitude-to-air-pressure.ts",
-          "libs/psychrometrics/src/constants.ts",
-          "libs/psychrometrics/src/dew-point-temperature.ts",
-          "libs/psychrometrics/src/enthalpy-to-specific-humidity.ts",
-          "libs/psychrometrics/src/enthalpy-to-temperature.ts",
-          "libs/psychrometrics/src/enthalpy.ts",
-          "libs/psychrometrics/src/initializer.ts",
-          "libs/psychrometrics/src/relative-to-specific-humidity.ts",
-          "libs/psychrometrics/src/saturation-vapor-pressure-to-temperature.ts",
-          "libs/psychrometrics/src/specific-and-relative-humidity-to-temperature.ts",
-          "libs/psychrometrics/src/specific-to-relative-humidity.ts",
-          "libs/psychrometrics/src/temperature-to-maximum-specific-humidity.ts",
-          "libs/psychrometrics/src/temperature-to-saturation-vapor-pressure.ts",
-          "libs/psychrometrics/src/wet-bulb-temperature-to-specific-humidity.ts",
-          "libs/psychrometrics/src/wet-bulb-temperature.ts"
-        ],
-        "tsConfig": "libs/psychrometrics/tsconfig.lib.json",
-        "assets": [],
-        "format": ["esm", "cjs"],
-        "generateExportsField": true,
-        "compiler": "babel",
-        "external": ["core-js", "@adaskothebeast/splines"]
-      }
-    },
     "publish": {
       "executor": "@nx/workspace:run-commands",
-      "options": {
-        "command": "node tools/scripts/publish.mjs psychrometrics {args.ver} {args.tag}"
-      },
       "dependsOn": [
         {
           "target": "build"
         }
-      ]
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
+      ],
+      "options": {
+        "command": "node tools/scripts/publish.mjs psychrometrics {args.ver} {args.tag}"
+      }
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/psychrometrics"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}",
+        "{workspaceRoot}/.reports/libs/psychrometrics",
+        "{workspaceRoot}/.reports/libs/psychrometrics/coverage"
+      ],
       "options": {
-        "jestConfig": "libs/psychrometrics/jest.config.ts"
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "coverage": true
+        }
       }
     },
     "copy-license-readme": {

@@ -15,6 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { altitudeToAirPressure } from './altitude-to-air-pressure';
 import {
   AVERAGE_PRESSURE_AT_SEA_LEVEL,
   GRAVITATIONAL_ACCELERATION,
@@ -24,34 +25,44 @@ import {
   UNIVERSAL_GAS_CONSTANT,
 } from './constants';
 
+export let minValidBarometricPressure = altitudeToAirPressure(8848);
+export let maxValidBarometricPressure = altitudeToAirPressure(-430.5);
+
 /**
- * Converts air pressure to altitude (above mean sea level).
- * Valid for pressures corresponding to altitudes from -430.5m to 8848m.
- * @param airPressure air pressure [Pa]
- * @returns meters above mean see level [m]
- * @throws TypeError if air pressure is not a finite number.
- * @throws RangeError if air pressure is outside valid range.
+ * Updates cached barometric pressure bounds when the active dry-air standard changes.
+ * @internal
+ */
+export function updateBarometricPressureBounds(): void {
+  minValidBarometricPressure = altitudeToAirPressure(8848);
+  maxValidBarometricPressure = altitudeToAirPressure(-430.5);
+}
+
+/**
+ * Calculates altitude over sea level [m] from atmospheric pressure [Pa]
+ * based on barometric formula https://en.wikipedia.org/wiki/Barometric_formula
+ * Valid for pressures corresponding to altitudes from -430.5m (Dead Sea) to 8848m (Mt. Everest).
+ * @param airPressure Atmospheric pressure [Pa].
+ * @returns Altitude over sea level [m].
+ * @throws TypeError if airPressure is not a finite number.
+ * @throws RangeError if airPressure is outside valid range (~31,444 Pa to ~106,605 Pa).
  */
 export function airPressureToAltitude(airPressure: number): number {
   if (!Number.isFinite(airPressure)) {
     throw new TypeError('Air pressure must be a finite number.');
   }
-  if (airPressure < 31444.24523603051) {
-    throw new RangeError(
-      `Air pressure too low (${airPressure} Pa). Must be at least 31444.25 Pa (corresponds to 8848m altitude).`,
-    );
+
+  if (airPressure > maxValidBarometricPressure) {
+    throw new RangeError(`Air pressure too high (${airPressure} Pa). Maximum is ${maxValidBarometricPressure} Pa.`);
   }
-  if (airPressure > 106604.6217946672) {
-    throw new RangeError(
-      `Air pressure too high (${airPressure} Pa). Must be at most 106604.62 Pa (corresponds to -430.5m altitude).`,
-    );
+
+  if (airPressure < minValidBarometricPressure) {
+    throw new RangeError(`Air pressure too low (${airPressure} Pa). Minimum is ${minValidBarometricPressure} Pa.`);
   }
+
+  const exponent =
+    (-UNIVERSAL_GAS_CONSTANT * TEMPERATURE_LAPSE_RATE) / (GRAVITATIONAL_ACCELERATION * MOLAR_MASS_OF_DRY_AIR);
   return (
     (STANDARD_TEMPERATURE / TEMPERATURE_LAPSE_RATE) *
-    (Math.pow(
-      airPressure / AVERAGE_PRESSURE_AT_SEA_LEVEL,
-      (UNIVERSAL_GAS_CONSTANT * TEMPERATURE_LAPSE_RATE) / (-GRAVITATIONAL_ACCELERATION * MOLAR_MASS_OF_DRY_AIR),
-    ) -
-      1)
+    (Math.pow(airPressure / AVERAGE_PRESSURE_AT_SEA_LEVEL, exponent) - 1)
   );
 }
