@@ -1,4 +1,5 @@
 const reportPath = '../../.reports/libs/psychrometrics/';
+const reportName = 'test-report';
 
 module.exports = {
   displayName: 'psychrometrics',
@@ -17,7 +18,7 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'html'],
   collectCoverage: true,
   coverageDirectory: `${reportPath}coverage`,
-  coverageReporters: ['cobertura', 'html', 'lcov'],
+  coverageReporters: ['cobertura', 'html', ['lcov', { projectRoot: '../../' }]],
   reporters: [
     'default',
     [
@@ -27,8 +28,8 @@ module.exports = {
         reportTitle: 'Test',
         additionalResultsProcessors: [],
         coverageLink: 'coverage/index.html',
-        resultJson: 'test.stare.json',
-        resultHtml: 'test.stare.html',
+        resultJson: `${reportName}.stare.json`,
+        resultHtml: `${reportName}.stare.html`,
         report: true,
         reportSummary: true,
       },
@@ -37,7 +38,7 @@ module.exports = {
       'jest-html-reporters',
       {
         publicPath: reportPath,
-        filename: 'test-report.html',
+        filename: `${reportName}.html`,
         pageTitle: 'Test',
         expand: true,
       },
@@ -46,7 +47,7 @@ module.exports = {
       'jest-xunit',
       {
         outputPath: reportPath,
-        filename: 'test-report.xunit.xml',
+        filename: `${reportName}.xunit.xml`,
         traitsRegex: [
           { regex: /\(Test Type:([^,)]+)(,|\)).*/g, name: 'Category' },
           { regex: /.*Test Traits: ([^)]+)\).*/g, name: 'Type' },
@@ -57,20 +58,22 @@ module.exports = {
       'jest-sonar',
       {
         outputDirectory: reportPath,
-        outputName: 'test.sonar.xml',
+        outputName: `${reportName}.sonar.xml`,
+        reportedFilePath: 'relative',
+        relativeRootDir: '../../',
       },
     ],
     [
       'jest-trx-results-processor',
       {
-        outputFile: `${reportPath}test.trx`,
+        outputFile: `${reportPath}${reportName}.trx`,
       },
     ],
     [
       'jest-junit',
       {
         outputDirectory: reportPath,
-        outputName: 'test.junit.xml',
+        outputName: `${reportName}.junit.xml`,
       },
     ],
   ],
